@@ -1,0 +1,25 @@
+@keyframes hovered {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
+.profile-info__edit-button {
+  margin-left: 18px;
+  background-color: #000;
+  background-image: url(../../../images/edit.svg);
+  background-size: 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid #fff;
+  width: 24px;
+  height: 24px;
+}
+
+.profile-info__edit-button:hover {
+  animation: hovered 0.2s linear forwards;
+  cursor: pointer;
+}

@@ -1,0 +1,13 @@
+.profile-info__author {
+  color: white;
+  font: 500 42px/48px 'Inter';
+  margin-block: 0;
+}
+
+@media screen and (max-width:522px) {
+  .profile-info__author {
+    text-align: center;
+    font: 500 27px/1.21 'Inter';
+    margin-top: 26px;
+  }
+}

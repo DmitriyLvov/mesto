@@ -9,7 +9,7 @@
 
 **GitHubPages**
 
-* [Ссылка на сайт](https://dmitriylvov.github.io/russian-travel/index.html)
+* [Ссылка на сайт](https://dmitriylvov.github.io/mesto/index.html)
 
 **Figma**
 

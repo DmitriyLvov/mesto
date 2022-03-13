@@ -5,8 +5,8 @@ let nameInput = document.querySelector('.popup__text-input_author');
 let jobInput = document.querySelector('.popup__text-input_description');
 
 // Выберите элементы, куда должны быть вставлены значения полей
-const desc = document.querySelector('.profile-info__description');
-const author = document.querySelector('.profile-info__author');
+const desc = document.querySelector('.profile-info__text-field_description');
+const author = document.querySelector('.profile-info__text-field_author');
 
 
 const showPopupHandle = () => {

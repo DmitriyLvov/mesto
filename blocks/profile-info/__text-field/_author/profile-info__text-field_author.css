@@ -1,0 +1,9 @@
+.profile-info__text-field_author {
+  font: 500 42px/48px 'Inter';
+}
+
+@media screen and (max-width:622px) {
+  .profile-info__text-field_author {
+    font: 500 27px/1.21 'Inter';
+  }
+}

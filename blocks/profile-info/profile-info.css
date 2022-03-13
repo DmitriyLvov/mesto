@@ -1,5 +1,7 @@
 .profile-info {
   margin-left: 30px;
+  box-sizing: border-box;
+  min-height: 73px;
 }
 
 @media screen and (max-width:522px) {

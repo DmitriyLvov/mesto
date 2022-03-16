@@ -1,10 +1,10 @@
-.profile-info__text-field_description {
+.profile-info__text-field_type_description {
   font: 500 18px/1.15 'Inter';
   margin-top: 8px;
 }
 
 @media screen and (max-width:622px) {
-  .profile-info__text-field_description {
+  .profile-info__text-field_type_description {
     margin-top: 7px;
     font: 400 14px/17px 'Inter';
   }

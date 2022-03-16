@@ -1,25 +1,32 @@
 // Находим форму в DOM
-let formElement = document.querySelector('.popup__container');
+//let formElement = document.querySelector('.popup__container');
+let formElement = document.querySelector('[name = "edit-form"]');
 // Находим поля формы в DOM
-let nameInput = document.querySelector('.popup__text-input_author');
-let jobInput = document.querySelector('.popup__text-input_description');
+let nameInput = document.querySelector('.popup__text-input_type_author');
+let jobInput = document.querySelector('.popup__text-input_type_description');
 
 // Выберите элементы, куда должны быть вставлены значения полей
-const desc = document.querySelector('.profile-info__text-field_description');
-const author = document.querySelector('.profile-info__text-field_author');
+const desc = document.querySelector('.profile-info__text-field_type_description');
+const author = document.querySelector('.profile-info__text-field_type_author');
 
 
-const showPopupHandle = () => {
+const showPopupHandler = () => {
   const popup = document.querySelector('.popup');
   popup.classList.add('popup_opened');
   nameInput.value = author.textContent;
   jobInput.value = desc.textContent;
 }
 
-const closePopupHandle = () => {
+const closePopupHandler = (e) => {
+  e.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   const popup = document.querySelector('.popup');
   popup.classList.remove('popup_opened');
 }
+
+// const closePopupHandle = () => {
+//   const popup = document.querySelector('.popup');
+//   popup.classList.remove('popup_opened');
+// }
 
 // const savePopupHandle = () => {
 //   author.textContent = authorInput.value;
@@ -28,13 +35,11 @@ const closePopupHandle = () => {
 // }
 
 const editButton = document.querySelector('.profile-info__edit-button');
-editButton.addEventListener('click', showPopupHandle);
+editButton.addEventListener('click', showPopupHandler);
 
 const closeButton = document.querySelector('.popup__close');
-closeButton.addEventListener('click', closePopupHandle);
+closeButton.addEventListener('click', closePopupHandler);
 
-// const saveButton = document.querySelector('.popup__submit-button');
-// saveButton.addEventListener('click', savePopupHandle);
 
 
 
@@ -51,9 +56,10 @@ function formSubmitHandler(evt) {
   desc.textContent = job;
   author.textContent = name;
   //Закрываем окно для сохранения
-  closePopupHandle();
+  closePopupHandler(evt);
 }
 
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
+
 formElement.addEventListener('submit', formSubmitHandler);

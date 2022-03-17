@@ -24,12 +24,12 @@
 
 @import url('../blocks/profile/profile.css');
 @import url('../blocks/profile/__avatar/profile__avatar.css');
-@import url('../blocks/profile-info/profile-info.css');
-@import url('../blocks/profile-info/__author-panel/profile-info__author-panel.css');
-@import url('../blocks/profile-info/__text-field/profile-info__text-field.css');
-@import url('../blocks/profile-info/__text-field/_type/profile-info__text-field_type_author.css');
-@import url('../blocks/profile-info/__text-field/_type/profile-info__text-field_type_description.css');
-@import url('../blocks/profile-info/__edit-button/profile-info__edit-button.css');
+@import url('../blocks/profile/__info/profile__info.css');
+@import url('../blocks/profile/__author-panel/profile__author-panel.css');
+@import url('../blocks/profile/__text-field/profile__text-field.css');
+@import url('../blocks/profile/__text-field/_type/profile__text-field_type_author.css');
+@import url('../blocks/profile/__text-field/_type/profile__text-field_type_description.css');
+@import url('../blocks/profile/__edit-button/profile__edit-button.css');
 @import url('../blocks/profile/__add-button/profile__add-button.css');
 @import url('../blocks/elements/elements.css');
 @import url('../blocks/elements/__item/elements__item.css');

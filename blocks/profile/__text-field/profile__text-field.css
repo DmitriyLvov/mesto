@@ -1,4 +1,4 @@
-.profile-info__text-field {
+.profile__text-field {
   color: white;
   margin-block: 0;
   margin: 0;
@@ -6,11 +6,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  text-align: center;
 }
 
 @media screen and (max-width:622px) {
-  .profile-info__text-field {
-    text-align: center;
+  .profile__text-field {
     max-width: 228px;
   }
 }

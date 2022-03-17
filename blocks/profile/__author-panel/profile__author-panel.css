@@ -1,10 +1,12 @@
-.profile-info__author-panel {
+.profile__author-panel {
   display: flex;
   line-height: 0;
+  position: relative;
 }
 
 @media screen and (max-width:522px) {
-  .profile-info__author-panel {
+  .profile__author-panel {
     margin-top: 26px;
+    justify-content: center;
   }
 }

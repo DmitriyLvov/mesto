@@ -7,7 +7,7 @@
   }
 }
 
-.profile-info__edit-button {
+.profile__edit-button {
   margin: auto 0 9px 18px;
   background-color: #000;
   background-image: url(../../../images/edit.svg);
@@ -19,15 +19,15 @@
   height: 24px;
 }
 
-.profile-info__edit-button:hover {
+.profile__edit-button:hover {
   animation: hovered 0.2s linear forwards;
   cursor: pointer;
 }
 
 @media screen and (max-width:522px) {
-  .profile-info__edit-button {
+  .profile__edit-button {
     width: 18px;
     height: 18px;
-    margin: auto 0 9px 10px;
+    margin: auto 0 6px 6px;
   }
 }

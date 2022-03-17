@@ -1,6 +1,6 @@
 .elements__description {
   display: flex;
-  margin: 25px 0 0 21px;
+  margin: 25px 21px 0 21px;
   justify-content: space-between;
   max-width: 246px;
 }

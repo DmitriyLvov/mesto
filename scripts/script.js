@@ -5,6 +5,44 @@ let formElement = document.querySelector('[name = "edit-form"]');
 let nameInput = document.querySelector('.popup__text-input_type_author');
 let jobInput = document.querySelector('.popup__text-input_type_description');
 
+const initialCards = [{
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
+//Создание карточки по шаблону
+const cardTemplate = document.querySelector('#card-template').content;
+const cardField = document.querySelector('.elements');
+
+const createCardByTemplate = (name, path) => {
+  const cardItem = cardTemplate.querySelector('.elements__item').cloneNode(true);
+  cardItem.querySelector('.elements__title').textContent = name;
+  cardItem.querySelector('.elements__image').src = path;
+  cardField.append(cardItem);
+}
+
+initialCards.forEach(card => createCardByTemplate(card.name, card.link));
+
 // Выберите элементы, куда должны быть вставлены значения полей
 const desc = document.querySelector('.profile__text-field_type_description');
 const author = document.querySelector('.profile__text-field_type_author');

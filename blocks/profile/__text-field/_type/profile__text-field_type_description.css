@@ -7,5 +7,6 @@
   .profile__text-field_type_description {
     margin: 7px auto 0 auto;
     font: 400 14px/17px 'Inter';
+    text-align: center;
   }
 }

@@ -10,14 +10,22 @@
 /* Блок popup */
 
 @import url('../blocks/popup/popup.css');
-@import url('../blocks/popup/_opened/popup_opened.css');
+@import url('../blocks/popup/_type/popup_type_form.css');
+@import url('../blocks/popup/_type/popup_type_image.css');
+@import url('../blocks/popup/_closing/popup_closing_form.css');
+@import url('../blocks/popup/_closing/popup_closing_image.css');
 @import url('../blocks/popup/__container/popup__container.css');
+@import url('../blocks/popup/__container/_type/popup__container_type_form.css');
+@import url('../blocks/popup/__container/_type/popup__container_type_image.css');
+@import url('../blocks/popup/__container/_closing/popup__container_closing.css');
 @import url('../blocks/popup/__title/popup__title.css');
-@import url('../blocks/popup/__close/popup__close.css');
+@import url('../blocks/popup/__close-button/popup__close-button.css');
 @import url('../blocks/popup/__text-input/popup__text-input.css');
 @import url('../blocks/popup/__text-input/_type/popup__text-input_type_author.css');
 @import url('../blocks/popup/__text-input/_type/popup__text-input_type_description.css');
 @import url('../blocks/popup/__submit-button/popup__submit-button.css');
+@import url('../blocks/popup/__image/popup__image.css');
+@import url('../blocks/popup/__description/popup__description.css');
 
 /* Блок profile */
 
@@ -30,6 +38,9 @@
 @import url('../blocks/profile/__text-field/_type/profile__text-field_type_description.css');
 @import url('../blocks/profile/__edit-button/profile__edit-button.css');
 @import url('../blocks/profile/__add-button/profile__add-button.css');
+
+/* Блок elements */
+
 @import url('../blocks/elements/elements.css');
 @import url('../blocks/elements/__item/elements__item.css');
 @import url('../blocks/elements/__image/elements__image.css');
@@ -37,5 +48,9 @@
 @import url('../blocks/elements/__like/elements__like.css');
 @import url('../blocks/elements/__like/_actived/elements__like_actived.css');
 @import url('../blocks/elements/__description/elements__description.css');
+@import url('../blocks/elements/__delete-button/elements__delete-button.css');
+
+/* Блок footer */
+
 @import url('../blocks/footer/footer.css');
 @import url('../blocks/footer/__copyright/footer__copyright.css');

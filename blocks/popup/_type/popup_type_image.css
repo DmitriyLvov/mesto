@@ -1,0 +1,12 @@
+@keyframes popup-smooth-image-open {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+}
+
+.popup_type_image {
+  animation: popup-smooth-image-open 0.3s linear forwards;
+}

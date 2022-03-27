@@ -1,0 +1,12 @@
+@keyframes popup-smooth-image-close {
+  from {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+.popup_closing_image {
+  animation: popup-smooth-image-close 0.45s linear forwards;
+}

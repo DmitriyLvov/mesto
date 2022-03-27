@@ -1,0 +1,12 @@
+@keyframes popup-smooth-form-close {
+  from {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+.popup_closing_form {
+  animation: popup-smooth-form-close 0.25s linear forwards;
+}

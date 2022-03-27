@@ -10,8 +10,9 @@
 /* Блок popup */
 
 @import url('../blocks/popup/popup.css');
-@import url('../blocks/popup/_type/popup_type_form.css');
+@import url('../blocks/popup/_type/popup_type_profile.css');
 @import url('../blocks/popup/_type/popup_type_image.css');
+@import url('../blocks/popup/_type/popup_type_card.css');
 @import url('../blocks/popup/_closing/popup_closing_form.css');
 @import url('../blocks/popup/_closing/popup_closing_image.css');
 @import url('../blocks/popup/__container/popup__container.css');

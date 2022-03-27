@@ -1,39 +1,9 @@
-//Функция сохранения при изменении данных автора
-function formSubmitAuthorHandler(authorValue, descriptionValue) {
-  author.textContent = authorValue;
-  desc.textContent = descriptionValue;
-}
+// Находим поля формы в DOM для сохранения имени и описания должности
+const nameInput = document.querySelector('.popup__text-input_type_author');
+const jobInput = document.querySelector('.popup__text-input_type_description');
+//Находим все элементы Popup
 
-//Функция плавного закрытия
-function smoothClosePopup(popupItem, popupType) {
-
-  //Анимация плавного закрывания для контейнера
-  const container = popupItem.querySelector('.popup__container');
-  //Анимация плавного закрывания для заднего фона
-
-  switch (popupType) {
-    case "image":
-      {
-        popupItem.classList.add('popup_closing_image');
-        break;
-      }
-    case "form":
-      {
-        popupItem.classList.add('popup_closing_form');
-        break;
-      }
-  }
-
-  container.classList.add('popup__container_closing');
-
-  //Операция удаления элемента после отработки всех анимаций
-  setTimeout(() => popupItem.remove(), 300);
-}
-
-// Находим поля формы в DOM
-let nameInput = document.querySelector('.popup__text-input_type_author');
-let jobInput = document.querySelector('.popup__text-input_type_description');
-
+//Набор стартовых карточек
 const initialCards = [{
     name: 'Архыз',
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
@@ -59,11 +29,15 @@ const initialCards = [{
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
-//Создание карточки по шаблону
-const cardTemplate = document.querySelector('#card-template').content;
-const cardField = document.querySelector('.elements');
 
-const createCardByTemplate = (name, path) => {
+//Функция сохранения при изменении данных автора
+function formSubmitAuthorHandler(authorValue, descriptionValue) {
+  author.textContent = authorValue;
+  desc.textContent = descriptionValue;
+}
+
+//Функция создания карточки по шаблону
+function createCard(name, path) {
   const cardItem = cardTemplate.querySelector('.elements__item').cloneNode(true);
   //Передаем имя и путь для экземпляра
   cardItem.querySelector('.elements__title').textContent = name;
@@ -77,11 +51,14 @@ const createCardByTemplate = (name, path) => {
   //Добавляем событие открытия изображения на все окно
   const image = cardItem.querySelector('.elements__image');
   image.addEventListener('click', () => createPopupImageTemplate(name, path));
-
-  cardField.prepend(cardItem);
+  return cardItem;
 }
 
-initialCards.forEach(card => createCardByTemplate(card.name, card.link));
+//Создание карточки по шаблону
+const cardTemplate = document.querySelector('#card-template').content;
+const cardField = document.querySelector('.elements');
+
+initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link)));
 
 //Создание POP-UP формы по шаблону
 const page = document.querySelector('.root');
@@ -106,7 +83,7 @@ const createPopupFormTemplate = (title, value1, value2, placeHolder1, placeHolde
     const confirmButton = popupItem.querySelector('.popup__submit-button');
     confirmButton.textContent = confirmButtonContent;
     //Создание события submit
-    let formElement = popupItem.querySelector('[name = "edit-form"]');
+    const formElement = popupItem.querySelector('[name = "edit-form"]');
     formElement.addEventListener('submit', (evt) => {
       evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
       submitFunction(field1Input.value, field2Input.value);

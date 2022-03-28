@@ -11,36 +11,37 @@ const descInput = document.querySelector('.popup__text-input_type_description');
 //Все элементы Popup для создания новой карточки
 const cardPopup = document.querySelector('.popup_type_card');
 const addButton = document.querySelector('.profile__add-button');
-
+const pictureName = document.querySelector('.popup__text-input_type_picture-name');
+const picturePath = document.querySelector('.popup__text-input_type_picture-path');
 //Все элементы POPUP для просмотра картинки во весь экран
 const imagePopup = document.querySelector('.popup_type_image');
 //Все элементы для создания карточек
 const cardTemplate = document.querySelector('#card-template').content;
 const cardField = document.querySelector('.elements');
 const initialCards = [{
-  name: 'Архыз',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-},
-{
-  name: 'Челябинская область',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-},
-{
-  name: 'Иваново',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-},
-{
-  name: 'Камчатка',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-},
-{
-  name: 'Холмогорский район',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-},
-{
-  name: 'Байкал',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-}
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
 ];
 
 //Функция открытия POPUP
@@ -54,8 +55,8 @@ function closePopup(evt) {
   const popup = closeButton.closest('.popup');
   popup.classList.remove('popup_opened');
 }
-//Функция создания Popup для профиля
-function editProfile() {
+//Функция открытия Popup для профиля
+function editProfilePopup() {
   //Сделать форму видимой
   openPopup(profilePopup);
   //Присвоить значения полям
@@ -64,36 +65,34 @@ function editProfile() {
   //Сделать процедуру закрытия окна
   const closeButton = profilePopup.querySelector('.popup__close-button');
   closeButton.addEventListener('click', closePopup);
-  //Создание события submit
-  const formElement = profilePopup.querySelector('[name = "edit-form"]');
-  formElement.addEventListener('submit', (evt) => {
-    evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-    author.textContent = authorInput.value;
-    desc.textContent = descInput.value;
-    //Закрываем окно
-    closePopup(evt);
-  });
 }
 
 //Функция создания Popup для добавления картинок
-function createNewCard(evt) {
+function addNewCardPopup() {
   //Сделать форму видимой
   openPopup(cardPopup);
   //Сделать процедуру закрытия окна
   const closeButton = cardPopup.querySelector('.popup__close-button');
   closeButton.addEventListener('click', closePopup);
-  //Создание события submit
-  const formElement = profilePopup.querySelector('[name = "edit-form"]');
-  formElement.addEventListener('submit', (evt) => {
-    evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+}
 
-    //Закрываем окно
-    closePopup(evt);
-  });
+//Функция открытия Popup для увеличения картинки
+function scalePicture(name, path) {
+  //Сделать окно видимым
+  openPopup(imagePopup);
+  //Созбытие закрытия окна
+  const closeButton = imagePopup.querySelector('.popup__close-button');
+  closeButton.addEventListener('click', closePopup);
+  //передаем данные о картинке
+  const imageSrc = imagePopup.querySelector('.popup__image');
+  imageSrc.src = path;
+  //Заполнение описания
+  const imageDesc = imagePopup.querySelector('.popup__description');
+  imageDesc.textContent = name;
 }
 
 //Функция создания карточки по шаблону
-function createCardFromData(name, path) {
+function createCard(name, path) {
   const cardItem = cardTemplate.querySelector('.elements__item').cloneNode(true);
   //Передаем имя и путь для экземпляра
   cardItem.querySelector('.elements__title').textContent = name;
@@ -106,59 +105,37 @@ function createCardFromData(name, path) {
   deleteButton.addEventListener('click', () => cardItem.remove());
   //Добавляем событие открытия изображения на все окно
   const image = cardItem.querySelector('.elements__image');
-  image.addEventListener('click', () => createPopupImageTemplate(name, path));
+  image.addEventListener('click', () => scalePicture(name, path));
   return cardItem;
 }
+//Создаем карточки из начального массива
+initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link)));
 
-initialCards.forEach(card => cardField.prepend(createCardFromData(card.name, card.link)));
-
-const createPopupFormTemplate = (title, value1, value2, placeHolder1, placeHolder2, submitFunction, confirmButtonContent) => {
-  const popupItem = popupFormTemplate.querySelector('.popup').cloneNode(true);
-  //Заполнение заголовка
-  const titleItem = popupItem.querySelector('.popup__title');
-  titleItem.textContent = title;
-  //Заполнение полей ПОП-АПа
-  const field1Input = popupItem.querySelector('.popup__text-input_type_author');
-  const field2Input = popupItem.querySelector('.popup__text-input_type_description');
-  field1Input.value = value1;
-  field1Input.placeholder = placeHolder1;
-  field2Input.value = value2;
-  field2Input.placeholder = placeHolder2;
-  //Создание кнопки закрытия
-  const closeButton = popupItem.querySelector('.popup__close-button');
-  closeButton.addEventListener('click', () => smoothClosePopup(popupItem, "form"));
-  //Измение надписи кнопки подтверждения
-  const confirmButton = popupItem.querySelector('.popup__submit-button');
-  confirmButton.textContent = confirmButtonContent;
-  //Создание события submit
-  const formElement = popupItem.querySelector('[name = "edit-form"]');
-  formElement.addEventListener('submit', (evt) => {
-    evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-    submitFunction(field1Input.value, field2Input.value);
-    //Закрываем окно для сохранения
-    smoothClosePopup(popupItem, "form")
-  });
-  page.append(popupItem);
-}
-//Создание POP-UP изображения по шаблону
-
-
-const createPopupImageTemplate = (name, path) => {
-  const popupImage = popupImageTemplate.querySelector('.popup').cloneNode(true);
-  //Событие закрытия картинки
-  const closeButton = popupImage.querySelector('.popup__close-button');
-  closeButton.addEventListener('click', () => smoothClosePopup(popupImage, "image"));
-  //Присваивание пути до картинки
-  const imageSrc = popupImage.querySelector('.popup__image');
-  imageSrc.src = path;
-  //Заполнение описания
-  const imageDesc = popupImage.querySelector('.popup__description');
-  imageDesc.textContent = name;
-  page.append(popupImage);
-}
 //Обработчик события для кнопки изменения данных автора
+editProfileButton.addEventListener('click', editProfilePopup);
 
-editProfileButton.addEventListener('click', editProfile);
+//Создание события submit для формы редактирования профиля
+const editProfileForm = profilePopup.querySelector('[name = "edit-profile-form"]');
+editProfileForm.addEventListener('submit', (evt) => {
+  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+  author.textContent = authorInput.value;
+  desc.textContent = descInput.value;
+  //Закрываем окно
+  closePopup(evt);
+  //Удаляем событие после отработки события
+});
 
 //Обработчик событий для кноки создания новой карточки
-addButton.addEventListener('click', createNewCard)
+addButton.addEventListener('click', addNewCardPopup);
+
+//Создание события submit для кнопки подтверждения новой карточки
+const addCardForm = cardPopup.querySelector('[name = "add-card-form"]');
+addCardForm.addEventListener('submit', (evt) => {
+  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+  cardField.prepend(createCard(pictureName.value, picturePath.value));
+  //Очищаем поля для следующей карточки
+  pictureName.value = "";
+  picturePath.value = "";
+  //Закрываем окно
+  closePopup(evt);
+});

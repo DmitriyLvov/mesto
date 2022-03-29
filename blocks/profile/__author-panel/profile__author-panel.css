@@ -4,7 +4,7 @@
   position: relative;
 }
 
-@media screen and (max-width:522px) {
+@media screen and (max-width:940px) {
   .profile__author-panel {
     margin-top: 26px;
     justify-content: center;

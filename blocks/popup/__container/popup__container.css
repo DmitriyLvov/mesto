@@ -1,15 +1,5 @@
-@keyframes popup-container-smooth-open {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .popup__container {
   display: flex;
   margin: 0 auto;
   z-index: 3;
-  animation: popup-container-smooth-open 0.3s linear forwards;
 }

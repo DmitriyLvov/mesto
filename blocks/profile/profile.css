@@ -13,11 +13,6 @@
     padding-top: 42px;
     justify-content: center;
     max-width: calc(100vw - 38px);
-  }
-}
-
-@media screen and (max-width:522px) {
-  .profile {
     flex-direction: column;
   }
 }

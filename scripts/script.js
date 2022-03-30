@@ -1,20 +1,22 @@
-// Находим поля формы в DOM для сохранения имени и описания должности
-const nameInput = document.querySelector('.popup__text-input_type_author');
-const jobInput = document.querySelector('.popup__text-input_type_description');
 //Все элементы Popup для редактирования профиля
 const profilePopup = document.querySelector('.popup_type_profile');
-const editProfileButton = document.querySelector('.profile__edit-button');
+const profileEditButton = document.querySelector('.profile__edit-button');
 const author = document.querySelector('.profile__text-field_type_author');
-const authorInput = document.querySelector('.popup__text-input_type_author');
-const desc = document.querySelector('.profile__text-field_type_description');
-const descInput = document.querySelector('.popup__text-input_type_description');
+const authorInput = profilePopup.querySelector('.popup__text-input_type_author');
+const description = document.querySelector('.profile__text-field_type_description');
+const descriptionInput = profilePopup.querySelector('.popup__text-input_type_description');
+const profilePopupCloseButton = profilePopup.querySelector('.popup__close-button');
 //Все элементы Popup для создания новой карточки
 const cardPopup = document.querySelector('.popup_type_card');
-const addButton = document.querySelector('.profile__add-button');
-const pictureName = document.querySelector('.popup__text-input_type_picture-name');
-const picturePath = document.querySelector('.popup__text-input_type_picture-path');
+const cardAddButton = document.querySelector('.profile__add-button');
+const cardName = cardPopup.querySelector('.popup__text-input_type_picture-name');
+const cardPath = cardPopup.querySelector('.popup__text-input_type_picture-path');
+const cardPopupCloseButton = cardPopup.querySelector('.popup__close-button');
 //Все элементы POPUP для просмотра картинки во весь экран
 const imagePopup = document.querySelector('.popup_type_image');
+const image = imagePopup.querySelector('.popup__image');
+const imageDescription = imagePopup.querySelector('.popup__description');
+const imagePopupСloseButton = imagePopup.querySelector('.popup__close-button');
 //Все элементы для создания карточек
 const cardTemplate = document.querySelector('#card-template').content;
 const cardField = document.querySelector('.elements');
@@ -49,46 +51,33 @@ function openPopup(itemPopup) {
   itemPopup.classList.add('popup_opened');
 }
 //Функция закрытия POPUP
-function closePopup(evt) {
-  //Кнопка close
-  const closeButton = evt.currentTarget;
-  const popup = closeButton.closest('.popup');
-  popup.classList.remove('popup_opened');
+function closePopup(itemPopup) {
+  itemPopup.classList.remove('popup_opened');
 }
 //Функция открытия Popup для профиля
 function editProfilePopup() {
-  //Сделать форму видимой
-  openPopup(profilePopup);
   //Присвоить значения полям
   authorInput.value = author.textContent;
-  descInput.value = desc.textContent;
-  //Сделать процедуру закрытия окна
-  const closeButton = profilePopup.querySelector('.popup__close-button');
-  closeButton.addEventListener('click', closePopup);
+  descriptionInput.value = description.textContent;
+  //Сделать форму видимой
+  openPopup(profilePopup);
 }
 
 //Функция создания Popup для добавления картинок
 function addNewCardPopup() {
   //Сделать форму видимой
   openPopup(cardPopup);
-  //Сделать процедуру закрытия окна
-  const closeButton = cardPopup.querySelector('.popup__close-button');
-  closeButton.addEventListener('click', closePopup);
 }
 
 //Функция открытия Popup для увеличения картинки
 function scalePicture(name, path) {
+  //передаем данные о картинке
+  image.src = path;
+  image.alt = name;
+  //Заполнение описания
+  imageDescription.textContent = name;
   //Сделать окно видимым
   openPopup(imagePopup);
-  //Созбытие закрытия окна
-  const closeButton = imagePopup.querySelector('.popup__close-button');
-  closeButton.addEventListener('click', closePopup);
-  //передаем данные о картинке
-  const imageSrc = imagePopup.querySelector('.popup__image');
-  imageSrc.src = path;
-  //Заполнение описания
-  const imageDesc = imagePopup.querySelector('.popup__description');
-  imageDesc.textContent = name;
 }
 
 //Функция создания карточки по шаблону
@@ -96,46 +85,55 @@ function createCard(name, path) {
   const cardItem = cardTemplate.querySelector('.elements__item').cloneNode(true);
   //Передаем имя и путь для экземпляра
   cardItem.querySelector('.elements__title').textContent = name;
-  cardItem.querySelector('.elements__image').src = path;
-  //Добавляем событие для лайка
-  const likeButton = cardItem.querySelector('.elements__like');
-  likeButton.addEventListener('click', () => likeButton.classList.toggle('elements__like_actived'));
-  //Добавляем событие удаления карточки
-  const deleteButton = cardItem.querySelector('.elements__delete-button');
-  deleteButton.addEventListener('click', () => cardItem.remove());
+  const cardPircture = cardItem.querySelector('.elements__image');
+  cardPircture.src = path;
+  cardPircture.alt = name;
   //Добавляем событие открытия изображения на все окно
-  const image = cardItem.querySelector('.elements__image');
-  image.addEventListener('click', () => scalePicture(name, path));
+  cardPircture.addEventListener('click', () => scalePicture(name, path));
+  //Добавляем событие для лайка
+  const cardLikeButton = cardItem.querySelector('.elements__like');
+  cardLikeButton.addEventListener('click', () => cardLikeButton.classList.toggle('elements__like_actived'));
+  //Добавляем событие удаления карточки
+  const cardDeleteButton = cardItem.querySelector('.elements__delete-button');
+  cardDeleteButton.addEventListener('click', () => cardItem.remove());
   return cardItem;
 }
 //Создаем карточки из начального массива
 initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link)));
 
 //Обработчик события для кнопки изменения данных автора
-editProfileButton.addEventListener('click', editProfilePopup);
+profileEditButton.addEventListener('click', editProfilePopup);
 
-//Создание события submit для формы редактирования профиля
-const editProfileForm = profilePopup.querySelector('[name = "edit-profile-form"]');
-editProfileForm.addEventListener('submit', (evt) => {
+//Обработчик события submit для формы редактирования профиля
+const profileEditForm = profilePopup.querySelector('[name = "edit-profile-form"]');
+profileEditForm.addEventListener('submit', (evt) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   author.textContent = authorInput.value;
-  desc.textContent = descInput.value;
+  description.textContent = descriptionInput.value;
   //Закрываем окно
-  closePopup(evt);
-  //Удаляем событие после отработки события
+  closePopup(profilePopup);
 });
 
-//Обработчик событий для кноки создания новой карточки
-addButton.addEventListener('click', addNewCardPopup);
+//Обработчик события закрытия окна profile popup
+profilePopupCloseButton.addEventListener('click', () => closePopup(profilePopup));
 
-//Создание события submit для кнопки подтверждения новой карточки
-const addCardForm = cardPopup.querySelector('[name = "add-card-form"]');
-addCardForm.addEventListener('submit', (evt) => {
+//Обработчик события для кноки создания новой карточки
+cardAddButton.addEventListener('click', addNewCardPopup);
+
+//Обработчик события submit для кнопки подтверждения новой карточки
+const cardAddForm = cardPopup.querySelector('[name = "add-card-form"]');
+cardAddForm.addEventListener('submit', (evt) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-  cardField.prepend(createCard(pictureName.value, picturePath.value));
-  //Очищаем поля для следующей карточки
-  pictureName.value = "";
-  picturePath.value = "";
+  cardField.prepend(createCard(cardName.value, cardPath.value));
   //Закрываем окно
-  closePopup(evt);
+  closePopup(cardPopup);
+  //Очищаем поля для следующей карточки
+  cardName.value = "";
+  cardPath.value = "";
 });
+
+//Обработчик события закрытия окна card Popup
+cardPopupCloseButton.addEventListener('click', () => closePopup(cardPopup));
+
+//Обработчик события закрытия окна image Popup
+imagePopupСloseButton.addEventListener('click', () => closePopup(imagePopup));

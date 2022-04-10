@@ -1,0 +1,8 @@
+.popup__error {
+  color: red;
+  font: 400 12px/1.21 'Inter';
+  margin: 5px 0 0 36px;
+  height: 29px;
+  display: none;
+  position: absolute;
+}

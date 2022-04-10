@@ -6,12 +6,14 @@ const authorInput = profilePopup.querySelector('.popup__text-input_type_author')
 const description = document.querySelector('.profile__text-field_type_description');
 const descriptionInput = profilePopup.querySelector('.popup__text-input_type_description');
 const profilePopupCloseButton = profilePopup.querySelector('.popup__close-button');
+const profilePopupConfirmButton = profilePopup.querySelector('.popup__submit-button');
 //Все элементы Popup для создания новой карточки
 const cardPopup = document.querySelector('.popup_type_card');
 const cardAddButton = document.querySelector('.profile__add-button');
 const cardName = cardPopup.querySelector('.popup__text-input_type_picture-name');
 const cardPath = cardPopup.querySelector('.popup__text-input_type_picture-path');
 const cardPopupCloseButton = cardPopup.querySelector('.popup__close-button');
+const cardPopupConfirmButton = cardPopup.querySelector('.popup__submit-button');
 //Все элементы POPUP для просмотра картинки во весь экран
 const imagePopup = document.querySelector('.popup_type_image');
 const image = imagePopup.querySelector('.popup__image');
@@ -49,11 +51,24 @@ const initialCards = [{
 //Функция открытия POPUP
 function openPopup(itemPopup) {
   itemPopup.classList.add('popup_opened');
+  const formPopup = itemPopup.querySelector('.popup__container_type_form');
+  if (formPopup !== null) {
+    //Проводим валидацию текущих значений для активации кнопки подтвердить
+    validateForm(formPopup);
+    //Очищаем ошибки валидации при первом открытии
+    clearAllErrorMessages(formPopup);
+  }
 }
 //Функция закрытия POPUP
 function closePopup(itemPopup) {
   itemPopup.classList.remove('popup_opened');
+  const formPopup = itemPopup.querySelector('.popup__container_type_form');
+  if (formPopup !== null) {
+    //Очищаем поля формы после закрытия
+    formPopup.reset();
+  }
 }
+
 //Функция открытия Popup для профиля
 function editProfilePopup() {
   //Присвоить значения полям
@@ -108,10 +123,12 @@ profileEditButton.addEventListener('click', editProfilePopup);
 const profileEditForm = profilePopup.querySelector('[name = "edit-profile-form"]');
 profileEditForm.addEventListener('submit', (evt) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-  author.textContent = authorInput.value;
-  description.textContent = descriptionInput.value;
-  //Закрываем окно
-  closePopup(profilePopup);
+  if (authorInput.validity.valid && descriptionInput.validity.valid) {
+    author.textContent = authorInput.value;
+    description.textContent = descriptionInput.value;
+    //Закрываем окно
+    closePopup(profilePopup);
+  }
 });
 
 //Обработчик события закрытия окна profile popup
@@ -127,9 +144,6 @@ cardAddForm.addEventListener('submit', (evt) => {
   cardField.prepend(createCard(cardName.value, cardPath.value));
   //Закрываем окно
   closePopup(cardPopup);
-  //Очищаем поля для следующей карточки
-  cardName.value = "";
-  cardPath.value = "";
 });
 
 //Обработчик события закрытия окна card Popup
@@ -137,3 +151,25 @@ cardPopupCloseButton.addEventListener('click', () => closePopup(cardPopup));
 
 //Обработчик события закрытия окна image Popup
 imagePopupСloseButton.addEventListener('click', () => closePopup(imagePopup));
+
+//Обработчик события для закрытия Popup по клику на overlay
+document.addEventListener('click', (evt) => {
+  const elementUnderClick = evt.target;
+  //Проверяем элемент на принадлежность к overlay
+  if (elementUnderClick.classList.contains('popup')) {
+    closePopup(elementUnderClick);
+  }
+})
+
+//Обработчик события для закрытия по нажатию кнопки Esc
+document.addEventListener('keydown', (evt) => {
+  const key = evt.code;
+  if (key === 'Escape') {
+    //Ищем открытый popup
+    const popupOpened = document.querySelector('.popup_opened');
+    //Если popup открыт, то закрываем его
+    if (popupOpened !== null) {
+      closePopup(popupOpened);
+    }
+  }
+})

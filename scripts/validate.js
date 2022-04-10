@@ -6,80 +6,78 @@ const settings = {
   inputErrorClass: 'popup__text-input_type_error',
   errorClass: 'popup__error_visible'
 };
-const formList = Array.from(document.querySelectorAll(settings.formSelector));
+const forms = Array.from(document.querySelectorAll(settings.formSelector));
 
-//Функция деактивации кнопки подтверждения
-function toggleButtonState(inputList, buttonElement) {
+//Функция изменения состояния кнопки подтверждения
+function toggleButtonState(form, button, settings) {
   // Если есть хотя бы один невалидный инпут
-  if (inputList.some((inputElement) => !inputElement.validity.valid)) {
+  if (!form.checkValidity()) {
     // сделай кнопку неактивной
-    buttonElement.classList.add(settings.inactiveButtonClass);
-    buttonElement.disabled = true;
+    button.classList.add(settings.inactiveButtonClass);
+    button.disabled = true;
   } else {
     // иначе сделай кнопку активной
-    buttonElement.classList.remove(settings.inactiveButtonClass);
-    buttonElement.disabled = false;
+    button.classList.remove(settings.inactiveButtonClass);
+    button.disabled = false;
   }
 };
+//Функция изменения состояния кнопки подтверждения для внешнего вызова
+function toogleButtonStateExternal(form) {
+  const button = form.querySelector(settings.submitButtonSelector);
+  toggleButtonState(form, button, settings);
+}
+//Функция очищения всех полей ошибок для внешнего вызова
+function clearAllErrorMessagesExternal(form) {
+  const inputs = form.querySelectorAll(settings.inputSelector);
+  inputs.forEach(input => hideInputError(input, settings))
+}
 
 // Функция, которая добавляет класс с ошибкой
-function showInputError(formInput) {
+function showInputError(input, settings) {
   //Выделение некорректного поля
-  formInput.classList.add(settings.inputErrorClass);
+  input.classList.add(settings.inputErrorClass);
   //Найдем элемент ошибки
-  const errorMessage = document.querySelector(`.popup__error_type_${formInput.id}`);
+  const errorMessage = document.querySelector(`.popup__error_type_${input.id}`);
   //Передадим текст ошибки
-  errorMessage.textContent = formInput.validationMessage;
+  errorMessage.textContent = input.validationMessage;
   //Сделаем видимым сообщение об ошибке
   errorMessage.classList.add(settings.errorClass);
 };
 
 // Функция, которая удаляет класс с ошибкой
-function hideInputError(formInput) {
+function hideInputError(input, settings) {
   //Снять выделение некорректного поля
-  formInput.classList.remove(settings.inputErrorClass);
+  input.classList.remove(settings.inputErrorClass);
   //Найдем элемент ошибки
-  const errorMessage = document.querySelector(`.popup__error_type_${formInput.id}`);
+  const errorMessage = document.querySelector(`.popup__error_type_${input.id}`);
   //Скроем сообщение об ошибке
   errorMessage.classList.remove(settings.errorClass);
   //Очистим текст ошибки
   errorMessage.textContent = "";
 };
 
-//Функция, которая удаляет все ошибки перед открытием
-function clearAllErrorMessages(formElement) {
-  const inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));
-  inputList.forEach(inputItem => hideInputError(inputItem));
-}
-//Функция валидации формы в момент открытия
-function validateForm(formElement) {
-  const inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));
-  const buttonSubmit = formElement.querySelector(settings.submitButtonSelector);
-  inputList.forEach(inputElement => isValid(inputElement, buttonSubmit, inputList));
-}
-
 // Функция, которая проверяет валидность поля
-function isValid(inputElement, buttonSubmit, inputList) {
+function handleInput(inputElement, buttonSubmit, formElement, settings) {
   if (!inputElement.validity.valid) {
     // Если поле не проходит валидацию, покажем ошибку
-    showInputError(inputElement);
+    showInputError(inputElement, settings);
   } else {
     // Если проходит, скроем
-    hideInputError(inputElement);
+    hideInputError(inputElement, settings);
   }
-  toggleButtonState(inputList, buttonSubmit);
+  toggleButtonState(formElement, buttonSubmit, settings);
 };
 
-function enableValidation() {
+function enableValidation(settings) {
   //Для каждого INPUT каждой формы создаем обработчик
-  formList.forEach(formElement => {
-    const inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));
+  forms.forEach(formElement => {
+    const inputs = Array.from(formElement.querySelectorAll(settings.inputSelector));
     const buttonSubmit = formElement.querySelector(settings.submitButtonSelector);
     //Добавляем события изменения для каждого инпут
-    inputList.forEach(inputElement => {
-      inputElement.addEventListener('input', () => isValid(inputElement, buttonSubmit, inputList));
+    inputs.forEach(inputElement => {
+      inputElement.addEventListener('input', () => handleInput(inputElement, buttonSubmit, formElement, settings));
     })
   })
 }
 
-enableValidation()
+enableValidation(settings)

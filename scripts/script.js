@@ -47,18 +47,6 @@ const initialCards = [{
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
-
-//Функция открытия POPUP
-function openPopup(itemPopup) {
-  itemPopup.classList.add('popup_opened');
-  const formPopup = itemPopup.querySelector('.popup__container_type_form');
-  if (formPopup !== null) {
-    //Проводим валидацию текущих значений для активации кнопки подтвердить
-    validateForm(formPopup);
-    //Очищаем ошибки валидации при первом открытии
-    clearAllErrorMessages(formPopup);
-  }
-}
 //Функция закрытия POPUP
 function closePopup(itemPopup) {
   itemPopup.classList.remove('popup_opened');
@@ -67,8 +55,46 @@ function closePopup(itemPopup) {
     //Очищаем поля формы после закрытия
     formPopup.reset();
   }
+  //Добавить событие на закрытие popup по клавише ESC
+  document.removeEventListener('keydown', closePopupWhenPressEsc);
+  //Добавить событие на закрытие popup при клике на overlay
+  document.removeEventListener('mousedown', closePopupWhenClickOnOverlay);
 }
-
+//Функция закрытия POPUP при нажатии на ESC
+function closePopupWhenPressEsc(evt) {
+  const key = evt.code;
+  if (key === 'Escape') {
+    //Ищем открытый popup
+    const popupOpened = document.querySelector('.popup_opened');
+    //Если popup открыт, то закрываем его
+    if (popupOpened !== null) {
+      closePopup(popupOpened);
+    }
+  }
+}
+//Функция закрытия POPUP при клике на overlay
+function closePopupWhenClickOnOverlay(evt) {
+  const elementUnderClick = evt.target;
+  //Проверяем элемент на принадлежность к overlay
+  if (elementUnderClick.classList.contains('popup') && evt.which === 1) {
+    closePopup(elementUnderClick);
+  }
+}
+//Функция открытия POPUP
+function openPopup(itemPopup) {
+  const formPopup = itemPopup.querySelector('.popup__container_type_form');
+  if (formPopup !== null) {
+    //Проверяем текущие значения для активации кнопки подтвердить
+    toogleButtonStateExternal(formPopup);
+    //Очищаем все ошибки от предыдущего вызова
+    clearAllErrorMessagesExternal(formPopup);
+  }
+  //Добавить событие на закрытие popup по клавише ESC
+  document.addEventListener('keydown', closePopupWhenPressEsc);
+  //Добавить событие на закрытие popup при клике на overlay
+  document.addEventListener('mousedown', closePopupWhenClickOnOverlay);
+  itemPopup.classList.add('popup_opened');
+}
 //Функция открытия Popup для профиля
 function editProfilePopup() {
   //Присвоить значения полям
@@ -91,6 +117,8 @@ function scalePicture(name, path) {
   image.alt = name;
   //Заполнение описания
   imageDescription.textContent = name;
+  //Обработчик событий для закрытия от нажатия ESC
+  document.addEventListener('keydown', closePopupWhenPressEsc);
   //Сделать окно видимым
   openPopup(imagePopup);
 }
@@ -150,26 +178,4 @@ cardAddForm.addEventListener('submit', (evt) => {
 cardPopupCloseButton.addEventListener('click', () => closePopup(cardPopup));
 
 //Обработчик события закрытия окна image Popup
-imagePopupСloseButton.addEventListener('click', () => closePopup(imagePopup));
-
-//Обработчик события для закрытия Popup по клику на overlay
-document.addEventListener('click', (evt) => {
-  const elementUnderClick = evt.target;
-  //Проверяем элемент на принадлежность к overlay
-  if (elementUnderClick.classList.contains('popup')) {
-    closePopup(elementUnderClick);
-  }
-})
-
-//Обработчик события для закрытия по нажатию кнопки Esc
-document.addEventListener('keydown', (evt) => {
-  const key = evt.code;
-  if (key === 'Escape') {
-    //Ищем открытый popup
-    const popupOpened = document.querySelector('.popup_opened');
-    //Если popup открыт, то закрываем его
-    if (popupOpened !== null) {
-      closePopup(popupOpened);
-    }
-  }
-})
+imagePopupСloseButton.addEventListener('click', () => closePopup(imagePopup))

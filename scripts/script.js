@@ -1,5 +1,7 @@
+const popups = document.querySelectorAll('.popup')
 //Все элементы Popup для редактирования профиля
 const profilePopup = document.querySelector('.popup_type_profile');
+const profileEditForm = profilePopup.querySelector('[name = "edit-profile-form"]');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const author = document.querySelector('.profile__text-field_type_author');
 const authorInput = profilePopup.querySelector('.popup__text-input_type_author');
@@ -9,6 +11,7 @@ const profilePopupCloseButton = profilePopup.querySelector('.popup__close-button
 const profilePopupConfirmButton = profilePopup.querySelector('.popup__submit-button');
 //Все элементы Popup для создания новой карточки
 const cardPopup = document.querySelector('.popup_type_card');
+const cardAddForm = cardPopup.querySelector('[name = "add-card-form"]');
 const cardAddButton = document.querySelector('.profile__add-button');
 const cardName = cardPopup.querySelector('.popup__text-input_type_picture-name');
 const cardPath = cardPopup.querySelector('.popup__text-input_type_picture-path');
@@ -51,9 +54,9 @@ const initialCards = [{
 function closePopup(itemPopup) {
   itemPopup.classList.remove('popup_opened');
   //Добавить событие на закрытие popup по клавише ESC
-  document.removeEventListener('keydown', closePopupWhenPressEsc);
+  gidocument.removeEventListener('keydown', closePopupWhenPressEsc);
   //Добавить событие на закрытие popup при клике на overlay
-  document.removeEventListener('mousedown', closePopupWhenClickOnOverlay);
+  //document.removeEventListener('mousedown', closePopupWhenClickOnOverlay);
 }
 //Функция закрытия POPUP при нажатии на ESC
 function closePopupWhenPressEsc(evt) {
@@ -77,17 +80,10 @@ function closePopupWhenClickOnOverlay(evt) {
 }
 //Функция открытия POPUP
 function openPopup(itemPopup) {
-  const formPopup = itemPopup.querySelector('.popup__container_type_form');
-  if (formPopup !== null) {
-    //Проверяем текущие значения для активации кнопки подтвердить
-    toogleButtonStateExternal(formPopup);
-    //Очищаем все ошибки от предыдущего вызова
-    clearAllErrorMessagesExternal(formPopup);
-  }
   //Добавить событие на закрытие popup по клавише ESC
   document.addEventListener('keydown', closePopupWhenPressEsc);
   //Добавить событие на закрытие popup при клике на overlay
-  document.addEventListener('mousedown', closePopupWhenClickOnOverlay);
+  //document.addEventListener('mousedown', closePopupWhenClickOnOverlay);
   itemPopup.classList.add('popup_opened');
 }
 //Функция открытия Popup для профиля
@@ -95,12 +91,18 @@ function editProfilePopup() {
   //Присвоить значения полям
   authorInput.value = author.textContent;
   descriptionInput.value = description.textContent;
+  //Очистить все поля с ошибками
+  clearAllErrorMessagesExternal(profileEditForm);
+  //Проверка состояния кнопки активации
+  toogleButtonStateExternal(profileEditForm);
   //Сделать форму видимой
   openPopup(profilePopup);
 }
 
 //Функция создания Popup для добавления картинок
 function addNewCardPopup() {
+  //Проверка состояния кнопки активации
+  toogleButtonStateExternal(cardAddForm);
   //Сделать форму видимой
   openPopup(cardPopup);
 }
@@ -112,8 +114,6 @@ function scalePicture(name, path) {
   image.alt = name;
   //Заполнение описания
   imageDescription.textContent = name;
-  //Обработчик событий для закрытия от нажатия ESC
-  document.addEventListener('keydown', closePopupWhenPressEsc);
   //Сделать окно видимым
   openPopup(imagePopup);
 }
@@ -143,7 +143,7 @@ initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link))
 profileEditButton.addEventListener('click', editProfilePopup);
 
 //Обработчик события submit для формы редактирования профиля
-const profileEditForm = profilePopup.querySelector('[name = "edit-profile-form"]');
+
 profileEditForm.addEventListener('submit', (evt) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   if (authorInput.validity.valid && descriptionInput.validity.valid) {
@@ -157,13 +157,12 @@ profileEditForm.addEventListener('submit', (evt) => {
 });
 
 //Обработчик события закрытия окна profile popup
-profilePopupCloseButton.addEventListener('click', () => closePopup(profilePopup));
+//profilePopupCloseButton.addEventListener('click', () => closePopup(profilePopup));
 
 //Обработчик события для кноки создания новой карточки
 cardAddButton.addEventListener('click', addNewCardPopup);
 
 //Обработчик события submit для кнопки подтверждения новой карточки
-const cardAddForm = cardPopup.querySelector('[name = "add-card-form"]');
 cardAddForm.addEventListener('submit', (evt) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   cardField.prepend(createCard(cardName.value, cardPath.value));
@@ -174,7 +173,23 @@ cardAddForm.addEventListener('submit', (evt) => {
 });
 
 //Обработчик события закрытия окна card Popup
-cardPopupCloseButton.addEventListener('click', () => closePopup(cardPopup));
+//cardPopupCloseButton.addEventListener('click', () => closePopup(cardPopup));
 
 //Обработчик события закрытия окна image Popup
-imagePopupСloseButton.addEventListener('click', () => closePopup(imagePopup))
+//imagePopupСloseButton.addEventListener('click', () => closePopup(imagePopup))
+
+
+//Добавление событий закрытия popup по клику на оверлей и нажатию на
+popups.forEach((popup) => {
+  popup.addEventListener('mousedown', (evt) => {
+    //Если нажали ЛКМ
+    if (evt.which === 1) {
+      if (evt.target.classList.contains('popup_opened')) {
+        closePopup(popup);
+      }
+      if (evt.target.classList.contains('popup__close-button')) {
+        closePopup(popup);
+      }
+    }
+  })
+})

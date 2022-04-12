@@ -23,38 +23,33 @@ const imagePopupСloseButton = imagePopup.querySelector('.popup__close-button');
 const cardTemplate = document.querySelector('#card-template').content;
 const cardField = document.querySelector('.elements');
 const initialCards = [{
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
+  name: 'Архыз',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+},
+{
+  name: 'Челябинская область',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+},
+{
+  name: 'Иваново',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+},
+{
+  name: 'Камчатка',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+},
+{
+  name: 'Холмогорский район',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+},
+{
+  name: 'Байкал',
+  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+}
 ];
 //Функция закрытия POPUP
 function closePopup(itemPopup) {
   itemPopup.classList.remove('popup_opened');
-  const formPopup = itemPopup.querySelector('.popup__container_type_form');
-  if (formPopup !== null) {
-    //Очищаем поля формы после закрытия
-    formPopup.reset();
-  }
   //Добавить событие на закрытие popup по клавише ESC
   document.removeEventListener('keydown', closePopupWhenPressEsc);
   //Добавить событие на закрытие popup при клике на overlay
@@ -156,6 +151,8 @@ profileEditForm.addEventListener('submit', (evt) => {
     description.textContent = descriptionInput.value;
     //Закрываем окно
     closePopup(profilePopup);
+    //Очищаем форму
+    profileEditForm.reset();
   }
 });
 
@@ -172,6 +169,8 @@ cardAddForm.addEventListener('submit', (evt) => {
   cardField.prepend(createCard(cardName.value, cardPath.value));
   //Закрываем окно
   closePopup(cardPopup);
+  //Очищаем форму
+  cardAddForm.reset();
 });
 
 //Обработчик события закрытия окна card Popup

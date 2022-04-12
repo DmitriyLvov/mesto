@@ -53,10 +53,8 @@ const initialCards = [{
 //Функция закрытия POPUP
 function closePopup(itemPopup) {
   itemPopup.classList.remove('popup_opened');
-  //Добавить событие на закрытие popup по клавише ESC
-  gidocument.removeEventListener('keydown', closePopupWhenPressEsc);
-  //Добавить событие на закрытие popup при клике на overlay
-  //document.removeEventListener('mousedown', closePopupWhenClickOnOverlay);
+  //Удалить событие на закрытие popup по клавише ESC
+  document.removeEventListener('keydown', closePopupWhenPressEsc);
 }
 //Функция закрытия POPUP при нажатии на ESC
 function closePopupWhenPressEsc(evt) {
@@ -68,14 +66,6 @@ function closePopupWhenPressEsc(evt) {
     if (popupOpened !== null) {
       closePopup(popupOpened);
     }
-  }
-}
-//Функция закрытия POPUP при клике на overlay
-function closePopupWhenClickOnOverlay(evt) {
-  const elementUnderClick = evt.target;
-  //Проверяем элемент на принадлежность к overlay
-  if (elementUnderClick.classList.contains('popup') && evt.which === 1) {
-    closePopup(elementUnderClick);
   }
 }
 //Функция открытия POPUP
@@ -156,9 +146,6 @@ profileEditForm.addEventListener('submit', (evt) => {
   }
 });
 
-//Обработчик события закрытия окна profile popup
-//profilePopupCloseButton.addEventListener('click', () => closePopup(profilePopup));
-
 //Обработчик события для кноки создания новой карточки
 cardAddButton.addEventListener('click', addNewCardPopup);
 
@@ -171,14 +158,6 @@ cardAddForm.addEventListener('submit', (evt) => {
   //Очищаем форму
   cardAddForm.reset();
 });
-
-//Обработчик события закрытия окна card Popup
-//cardPopupCloseButton.addEventListener('click', () => closePopup(cardPopup));
-
-//Обработчик события закрытия окна image Popup
-//imagePopupСloseButton.addEventListener('click', () => closePopup(imagePopup))
-
-
 //Добавление событий закрытия popup по клику на оверлей и нажатию на
 popups.forEach((popup) => {
   popup.addEventListener('mousedown', (evt) => {

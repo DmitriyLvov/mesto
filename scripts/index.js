@@ -2,7 +2,8 @@ import { Card } from "../scripts/Card.js";
 import { FormValidator } from "./FormValidator.js";
 
 const popups = document.querySelectorAll('.popup')
-  //Все элементы Popup для редактирования профиля
+const formValidators = {};
+//Все элементы Popup для редактирования профиля
 const profilePopup = document.querySelector('.popup_type_profile');
 const profileEditForm = profilePopup.querySelector('[name = "edit-profile-form"]');
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -74,22 +75,22 @@ function openPopup(itemPopup) {
   itemPopup.classList.add('popup_opened');
 }
 //Функция открытия Popup для профиля
-function editProfilePopup(validator) {
+function editProfilePopup() {
   //Присвоить значения полям
   authorInput.value = author.textContent;
   descriptionInput.value = description.textContent;
   //Очистить все поля с ошибками
-  validator.clearAllErrorMessages();
+  formValidators.profiledValidator.clearAllErrorMessages();
   //Проверка состояния кнопки активации
-  validator.toggleButtonState();
+  formValidators.profiledValidator.toggleButtonState();
   //Сделать форму видимой
   openPopup(profilePopup);
 }
 
 //Функция создания Popup для добавления картинок
-function addNewCardPopup(validator) {
+function addNewCardPopup() {
   //Проверка состояния кнопки активации
-  validator.toggleButtonState();
+  formValidators.cardValidator.toggleButtonState();
   //Сделать форму видимой
   openPopup(cardPopup);
 }
@@ -119,16 +120,15 @@ const settings = {
   inputErrorClass: 'popup__text-input_type_error',
   errorClass: 'popup__error_visible'
 };
-// const formValidator = new FormValidator(settings);
 
 //Создаем карточки из начального массива
 initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link)));
 
 //Валидация формы для редактирования профиля
-const profileFormValidator = new FormValidator(settings, profileEditForm);
-profileFormValidator.enableValidation();
+formValidators.profiledValidator = new FormValidator(settings, profileEditForm);
+formValidators.profiledValidator.enableValidation();
 //Обработчик события для кнопки изменения данных автора
-profileEditButton.addEventListener('click', () => editProfilePopup(profileFormValidator));
+profileEditButton.addEventListener('click', () => editProfilePopup());
 
 //Обработчик события submit для формы редактирования профиля
 profileEditForm.addEventListener('submit', (evt) => {
@@ -138,16 +138,14 @@ profileEditForm.addEventListener('submit', (evt) => {
     description.textContent = descriptionInput.value;
     //Закрываем окно
     closePopup(profilePopup);
-    //Очищаем форму
-    profileEditForm.reset();
   }
 });
 
 //Валидация формы создания новой карточки
-const addCardFormValidator = new FormValidator(settings, cardAddForm);
-addCardFormValidator.enableValidation();
+formValidators.cardValidator = new FormValidator(settings, cardAddForm);
+formValidators.cardValidator.enableValidation();
 //Обработчик события для кноки создания новой карточки
-cardAddButton.addEventListener('click', () => addNewCardPopup(addCardFormValidator));
+cardAddButton.addEventListener('click', () => addNewCardPopup());
 
 //Обработчик события submit для кнопки подтверждения новой карточки
 cardAddForm.addEventListener('submit', (evt) => {

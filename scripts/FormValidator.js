@@ -1,11 +1,11 @@
 export class FormValidator {
   constructor(settings, form) {
     //Сохраняем настройки в приватные поля для дальнейшего использования
-    this._inputSelector = settings.inputSelector;
     this._inactiveButtonClass = settings.inactiveButtonClass;
     this._inputErrorClass = settings.inputErrorClass;
     this._errorClass = settings.errorClass;
     this._form = form;
+    this._inputs = Array.from(this._form.querySelectorAll(settings.inputSelector));
     this._submitButton = form.querySelector(settings.submitButtonSelector);
   }
 
@@ -25,8 +25,7 @@ export class FormValidator {
 
   //Функция очищения всех полей ошибок для внешнего вызова
   clearAllErrorMessages = () => {
-    const inputs = this._form.querySelectorAll(this._inputSelector);
-    inputs.forEach(input => this._hideInputError(input))
+    this._inputs.forEach(input => this._hideInputError(input))
   }
 
   // Функция, которая добавляет класс с ошибкой
@@ -34,7 +33,7 @@ export class FormValidator {
     //Выделение некорректного поля
     input.classList.add(this._inputErrorClass);
     //Найдем элемент ошибки
-    const errorMessage = document.querySelector(`.popup__error_type_${input.id}`);
+    const errorMessage = this._form.querySelector(`.popup__error_type_${input.id}`);
     //Передадим текст ошибки
     errorMessage.textContent = input.validationMessage;
     //Сделаем видимым сообщение об ошибке
@@ -65,9 +64,8 @@ export class FormValidator {
   };
 
   enableValidation = () => {
-    const inputs = Array.from(this._form.querySelectorAll(this._inputSelector));
     //Добавляем события изменения для каждого инпут
-    inputs.forEach(inputElement => {
+    this._inputs.forEach(inputElement => {
       inputElement.addEventListener('input',
         () => this._handleInput(inputElement));
     })

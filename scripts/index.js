@@ -80,9 +80,9 @@ function editProfilePopup() {
   authorInput.value = author.textContent;
   descriptionInput.value = description.textContent;
   //Очистить все поля с ошибками
-  formValidators.profiledValidator.clearAllErrorMessages();
+  formValidators.profileValidator.clearAllErrorMessages();
   //Проверка состояния кнопки активации
-  formValidators.profiledValidator.toggleButtonState();
+  formValidators.profileValidator.toggleButtonState();
   //Сделать форму видимой
   openPopup(profilePopup);
 }
@@ -125,8 +125,8 @@ const settings = {
 initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link)));
 
 //Валидация формы для редактирования профиля
-formValidators.profiledValidator = new FormValidator(settings, profileEditForm);
-formValidators.profiledValidator.enableValidation();
+formValidators.profileValidator = new FormValidator(settings, profileEditForm);
+formValidators.profileValidator.enableValidation();
 //Обработчик события для кнопки изменения данных автора
 profileEditButton.addEventListener('click', () => editProfilePopup());
 

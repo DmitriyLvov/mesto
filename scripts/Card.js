@@ -10,19 +10,20 @@ export class Card {
     this._cardPircture = this._cardItem.querySelector('.elements__image');
     this._cardPircture.src = imagePath;
     this._cardPircture.alt = imageName;
-    this._setEventListeners(scalePictureFunction);
+    this._scalePictureFunction = scalePictureFunction;
+    this._cardLikeButton = this._cardItem.querySelector('.elements__like');
+    this._setEventListeners();
   }
 
   getCard = () => {
     return this._cardItem;
   }
-  _setEventListeners = (scalePictureFunction) => {
+  _setEventListeners = () => {
     //Добавляем событие открытия изображения на все окно
     this._cardPircture.addEventListener('click',
-      () => scalePictureFunction(this._cardPircture.alt, this._cardPircture.src));
+      () => this._scalePictureFunction(this._cardPircture.alt, this._cardPircture.src));
     //Добавляем событие для лайка
-    const cardLikeButton = this._cardItem.querySelector('.elements__like');
-    cardLikeButton.addEventListener('click', () => cardLikeButton.classList.toggle('elements__like_actived'));
+    this._cardLikeButton.addEventListener('click', () => cardLikeButton.classList.toggle('elements__like_actived'));
     //Добавляем событие удаления карточки
     const cardDeleteButton = this._cardItem.querySelector('.elements__delete-button');
     cardDeleteButton.addEventListener('click', () => this._cardItem.remove());

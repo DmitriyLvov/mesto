@@ -10,17 +10,12 @@ export default class Popup {
   close() {
     this._popup.classList.remove('popup_opened');
     //Удалить событие на закрытие popup по клавише ESC
-    document.removeEventListener('keydown', closePopupWhenPressEsc);
+    document.removeEventListener('keydown', _handleEscClose);
   }
   _handleEscClose() {
     const key = evt.code;
     if (key === 'Escape') {
-      //Ищем открытый popup
-      const popupOpened = document.querySelector('.popup_opened');
-      //Если popup открыт, то закрываем его
-      if (popupOpened !== null) {
-        closePopup(popupOpened);
-      }
+      this.close();
     }
   }
   setEventListeners() {
@@ -28,10 +23,12 @@ export default class Popup {
       //Если нажали ЛКМ
       if (evt.which === 1) {
         if (evt.target.classList.contains('popup_opened')) {
-          closePopup(popup);
+          //Если кликнули на overlay
+          this.close();
         }
         if (evt.target.classList.contains('popup__close-button')) {
-          closePopup(popup);
+          //Если кликнули на кнопку закрытия
+          this.close();
         }
       }
     })

@@ -1,5 +1,8 @@
 import { Card } from "../scripts/Card.js";
 import { FormValidator } from "./FormValidator.js";
+import PopupWithImage from '../components/PopupWithImage.js';
+import Section from "../components/Section.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 
 const popups = document.querySelectorAll('.popup')
 const formValidators = {};
@@ -18,6 +21,7 @@ const cardAddButton = document.querySelector('.profile__add-button');
 const cardName = cardPopup.querySelector('.popup__text-input_type_picture-name');
 const cardPath = cardPopup.querySelector('.popup__text-input_type_picture-path');
 //Все элементы POPUP для просмотра картинки во весь экран
+const imagePopupSelector = '.popup_type_image';
 const imagePopup = document.querySelector('.popup_type_image');
 const image = imagePopup.querySelector('.popup__image');
 const imageDescription = imagePopup.querySelector('.popup__description');
@@ -48,6 +52,11 @@ const initialCards = [{
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
+
+// const img1 = new PopupWithImage({ name: initialCards[0].name, path: initialCards[0].link }, imagePopupSelector);
+// img1.setEventListeners();
+// img1.open();
+
 //Функция закрытия POPUP
 function closePopup(itemPopup) {
   itemPopup.classList.remove('popup_opened');
@@ -107,8 +116,8 @@ const scalePicture = (name, path) => {
 }
 
 //Функция создания карточки по шаблону
-function createCard(name, path) {
-  const newCard = new Card(name, path, '#card-template', scalePicture);
+function createCard(card) {
+  const newCard = new Card(card.name, card.link, '#card-template', scalePicture);
   return newCard.getCard();
 }
 //Cоздаем класс для валидации форм
@@ -122,7 +131,9 @@ const settings = {
 };
 
 //Создаем карточки из начального массива
-initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link)));
+//initialCards.forEach(card => cardField.prepend(createCard(card.name, card.link)));
+const section = new Section({ items: initialCards, renderer: createCard }, '.elements');
+section.renderItems();
 
 //Валидация формы для редактирования профиля
 formValidators.profileValidator = new FormValidator(settings, profileEditForm);
@@ -140,6 +151,16 @@ profileEditForm.addEventListener('submit', (evt) => {
     closePopup(profilePopup);
   }
 });
+
+const submitEditForm = (evt) => {
+  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+  if (authorInput.validity.valid && descriptionInput.validity.valid) {
+    author.textContent = authorInput.value;
+    description.textContent = descriptionInput.value;
+    //Закрываем окно
+    closePopup(profilePopup);
+  }
+}
 
 //Валидация формы создания новой карточки
 formValidators.cardValidator = new FormValidator(settings, cardAddForm);
@@ -170,3 +191,5 @@ popups.forEach((popup) => {
     }
   })
 })
+
+const formPopup = new PopupWithForm('.popup_type_profile', "");

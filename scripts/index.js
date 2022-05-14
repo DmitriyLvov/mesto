@@ -3,6 +3,7 @@ import { FormValidator } from "./FormValidator.js";
 import PopupWithImage from '../components/PopupWithImage.js';
 import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import UserInfo from "../components/UserInfo.js";
 
 const popups = document.querySelectorAll('.popup')
 const formValidators = {};
@@ -20,11 +21,6 @@ const cardAddForm = cardPopup.querySelector('[name = "add-card-form"]');
 const cardAddButton = document.querySelector('.profile__add-button');
 const cardName = cardPopup.querySelector('.popup__text-input_type_picture-name');
 const cardPath = cardPopup.querySelector('.popup__text-input_type_picture-path');
-//Все элементы POPUP для просмотра картинки во весь экран
-const imagePopupSelector = '.popup_type_image';
-const imagePopup = document.querySelector('.popup_type_image');
-const image = imagePopup.querySelector('.popup__image');
-const imageDescription = imagePopup.querySelector('.popup__description');
 //Все элементы для создания карточек
 const cardField = document.querySelector('.elements');
 const initialCards = [{
@@ -53,47 +49,45 @@ const initialCards = [{
   }
 ];
 
-// const img1 = new PopupWithImage({ name: initialCards[0].name, path: initialCards[0].link }, imagePopupSelector);
-// img1.setEventListeners();
-// img1.open();
+const user = new UserInfo("test", "test");
 
-//Функция закрытия POPUP
-function closePopup(itemPopup) {
-  itemPopup.classList.remove('popup_opened');
-  //Удалить событие на закрытие popup по клавише ESC
-  document.removeEventListener('keydown', closePopupWhenPressEsc);
-}
-//Функция закрытия POPUP при нажатии на ESC
-function closePopupWhenPressEsc(evt) {
-  const key = evt.code;
-  if (key === 'Escape') {
-    //Ищем открытый popup
-    const popupOpened = document.querySelector('.popup_opened');
-    //Если popup открыт, то закрываем его
-    if (popupOpened !== null) {
-      closePopup(popupOpened);
-    }
-  }
-}
-//Функция открытия POPUP
-function openPopup(itemPopup) {
-  //Добавить событие на закрытие popup по клавише ESC
-  document.addEventListener('keydown', closePopupWhenPressEsc);
-  //Добавить событие на закрытие popup при клике на overlay
-  //document.addEventListener('mousedown', closePopupWhenClickOnOverlay);
-  itemPopup.classList.add('popup_opened');
-}
 //Функция открытия Popup для профиля
-function editProfilePopup() {
-  //Присвоить значения полям
-  authorInput.value = author.textContent;
-  descriptionInput.value = description.textContent;
-  //Очистить все поля с ошибками
-  formValidators.profileValidator.clearAllErrorMessages();
-  //Проверка состояния кнопки активации
-  formValidators.profileValidator.toggleButtonState();
-  //Сделать форму видимой
-  openPopup(profilePopup);
+function editProfilePopup(user) {
+  //Создаем Popup с формой для редактирования данных автора
+  const formPopup = new PopupWithForm('.popup_type_profile', submitEditForm);
+  console.log(formPopup)
+  formPopup.setEventListeners();
+  formPopup.open();
+  formPopup.user = user;
+
+  // //Присвоить значения полям
+  // authorInput.value = author.textContent;
+  // descriptionInput.value = description.textContent;
+  // //Очистить все поля с ошибками
+  // formValidators.profileValidator.clearAllErrorMessages();
+  // //Проверка состояния кнопки активации
+  // formValidators.profileValidator.toggleButtonState();
+  // //Сделать форму видимой
+  // openPopup(profilePopup);
+}
+
+function submitEditForm(evt, formInputs) {
+  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+  console.log(formInputs);
+
+  console.log(this.user);
+  if (!Object.values(formInputs).some(input => input.validity.valid === false)) {
+    this.user.setUserInfo("111", "333");
+
+  }
+
+  this.close();
+  // if (authorInput.validity.valid && descriptionInput.validity.valid) {
+  //   author.textContent = authorInput.value;
+  //   description.textContent = descriptionInput.value;
+  //   //Закрываем окно
+  //   closePopup(profilePopup);
+  // }
 }
 
 //Функция создания Popup для добавления картинок
@@ -105,19 +99,15 @@ function addNewCardPopup() {
 }
 
 //Функция открытия Popup для увеличения картинки
-const scalePicture = (name, path) => {
-  //передаем данные о картинке
-  image.src = path;
-  image.alt = name;
-  //Заполнение описания
-  imageDescription.textContent = name;
-  //Сделать окно видимым
-  openPopup(imagePopup);
+const handleCardClick = (name, path) => {
+  const imagePopup = new PopupWithImage({ name, path }, '.popup_type_image');
+  imagePopup.setEventListeners();
+  imagePopup.open();
 }
 
 //Функция создания карточки по шаблону
 function createCard(card) {
-  const newCard = new Card(card.name, card.link, '#card-template', scalePicture);
+  const newCard = new Card(card.name, card.link, '#card-template', handleCardClick);
   return newCard.getCard();
 }
 //Cоздаем класс для валидации форм
@@ -139,28 +129,20 @@ section.renderItems();
 formValidators.profileValidator = new FormValidator(settings, profileEditForm);
 formValidators.profileValidator.enableValidation();
 //Обработчик события для кнопки изменения данных автора
-profileEditButton.addEventListener('click', () => editProfilePopup());
+profileEditButton.addEventListener('click', () => editProfilePopup(user));
 
 //Обработчик события submit для формы редактирования профиля
-profileEditForm.addEventListener('submit', (evt) => {
-  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-  if (authorInput.validity.valid && descriptionInput.validity.valid) {
-    author.textContent = authorInput.value;
-    description.textContent = descriptionInput.value;
-    //Закрываем окно
-    closePopup(profilePopup);
-  }
-});
+// profileEditForm.addEventListener('submit', (evt) => {
+//   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+//   if (authorInput.validity.valid && descriptionInput.validity.valid) {
+//     author.textContent = authorInput.value;
+//     description.textContent = descriptionInput.value;
+//     //Закрываем окно
+//     closePopup(profilePopup);
+//   }
+// });
 
-const submitEditForm = (evt) => {
-  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-  if (authorInput.validity.valid && descriptionInput.validity.valid) {
-    author.textContent = authorInput.value;
-    description.textContent = descriptionInput.value;
-    //Закрываем окно
-    closePopup(profilePopup);
-  }
-}
+
 
 //Валидация формы создания новой карточки
 formValidators.cardValidator = new FormValidator(settings, cardAddForm);
@@ -178,18 +160,18 @@ cardAddForm.addEventListener('submit', (evt) => {
   cardAddForm.reset();
 });
 //Добавление событий закрытия popup по клику на оверлей и нажатию на
-popups.forEach((popup) => {
-  popup.addEventListener('mousedown', (evt) => {
-    //Если нажали ЛКМ
-    if (evt.which === 1) {
-      if (evt.target.classList.contains('popup_opened')) {
-        closePopup(popup);
-      }
-      if (evt.target.classList.contains('popup__close-button')) {
-        closePopup(popup);
-      }
-    }
-  })
-})
+// popups.forEach((popup) => {
+//   popup.addEventListener('mousedown', (evt) => {
+//     //Если нажали ЛКМ
+//     if (evt.which === 1) {
+//       if (evt.target.classList.contains('popup_opened')) {
+//         closePopup(popup);
+//       }
+//       if (evt.target.classList.contains('popup__close-button')) {
+//         closePopup(popup);
+//       }
+//     }
+//   })
+// })
 
-const formPopup = new PopupWithForm('.popup_type_profile', "");
+//const formPopup = new PopupWithForm('.popup_type_profile', "");

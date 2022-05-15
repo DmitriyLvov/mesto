@@ -1,7 +1,7 @@
 export default class UserInfo {
   constructor(userSelector, descriptionSelector) {
-    this._author = document.querySelector('.profile__text-field_type_author');
-    this._description = document.querySelector('.profile__text-field_type_description');
+    this._author = document.querySelector(userSelector);
+    this._description = document.querySelector(descriptionSelector);
   }
 
   getUserInfo() {

@@ -6,7 +6,6 @@ export default class Popup {
   open() {
     this._popup.classList.add('popup_opened');
     //Добавить событие на закрытие popup по клавише ESC
-
   }
   close() {
     this._popup.classList.remove('popup_opened');
@@ -20,38 +19,26 @@ export default class Popup {
     }
   }
   setEventListeners() {
-    this._popup.addEventListener('mousedown', (evt) => {
-      //Если нажали ЛКМ
-      if (evt.which === 1) {
-        if (evt.target.classList.contains('popup_opened')) {
-          //Если кликнули на overlay
-          this.close();
-        }
-        if (evt.target.classList.contains('popup__close-button')) {
-          //Если кликнули на кнопку закрытия
-          this.close();
-        }
-      }
-    })
+    this._popup.addEventListener('mousedown', this._closeFunction.bind(this))
+    document.addEventListener('keydown', this._handleEscClose.bind(this));
+  }
 
-    document.addEventListener('keydown', (evt) => this._handleEscClose(evt));
+  _closeFunction(evt) {
+    //Если нажали ЛКМ
+    if (evt.which === 1) {
+      if (evt.target.classList.contains('popup_opened')) {
+        //Если кликнули на overlay
+        this.close();
+      }
+      if (evt.target.classList.contains('popup__close-button')) {
+        //Если кликнули на кнопку закрытия
+        this.close();
+      }
+    }
   }
 
   _removeEventListeners() {
-    this._popup.removeEventListener('mousedown', (evt) => {
-      //Если нажали ЛКМ
-      if (evt.which === 1) {
-        if (evt.target.classList.contains('popup_opened')) {
-          //Если кликнули на overlay
-          this.close();
-        }
-        if (evt.target.classList.contains('popup__close-button')) {
-          //Если кликнули на кнопку закрытия
-          this.close();
-        }
-      }
-    })
-
-    document.removeEventListener('keydown', (evt) => this._handleEscClose(evt));
+    this._popup.removeEventListener('mousedown', this._closeFunction);
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 }

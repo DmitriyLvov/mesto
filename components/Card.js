@@ -23,7 +23,7 @@ export class Card {
     this._cardPircture.addEventListener('click',
       () => this._scalePictureFunction(this._cardPircture.alt, this._cardPircture.src));
     //Добавляем событие для лайка
-    this._cardLikeButton.addEventListener('click', () => cardLikeButton.classList.toggle('elements__like_actived'));
+    this._cardLikeButton.addEventListener('click', () => this._cardLikeButton.classList.toggle('elements__like_actived'));
     //Добавляем событие удаления карточки
     const cardDeleteButton = this._cardItem.querySelector('.elements__delete-button');
     cardDeleteButton.addEventListener('click', () => this._cardItem.remove());

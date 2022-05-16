@@ -1,4 +1,5 @@
 import './index.css';
+import { initialCards } from '../components/InitialCards';
 import { Card } from "../components/Card.js";
 import { FormValidator } from "../components/FormValidator.js";
 import PopupWithImage from '../components/PopupWithImage.js';
@@ -6,7 +7,6 @@ import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 
-const popups = document.querySelectorAll('.popup')
 const formValidators = {};
 //Все элементы Popup для редактирования профиля
 const profilePopup = document.querySelector('.popup_type_profile');
@@ -17,46 +17,14 @@ const profileEditButton = document.querySelector('.profile__edit-button');
 const cardPopup = document.querySelector('.popup_type_card');
 const cardAddForm = cardPopup.querySelector('[name = "add-card-form"]');
 const cardAddButton = document.querySelector('.profile__add-button');
-const cardName = cardPopup.querySelector('.popup__text-input_type_picture-name');
-const cardPath = cardPopup.querySelector('.popup__text-input_type_picture-path');
-//Все элементы для создания карточек
-const cardField = document.querySelector('.elements');
-const initialCards = [{
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
+//Создаем Попап для просмотра изображений
+const imagePopup = new PopupWithImage('.popup_type_image');
+imagePopup.setEventListeners();
 
-//Функция открытия Popup для увеличения картинки
-const handleCardClick = (name, path) => {
-  const imagePopup = new PopupWithImage({ name, path }, '.popup_type_image');
-  imagePopup.setEventListeners();
-  imagePopup.open();
-}
 
 //Функция создания карточки по шаблону
 function createCard(card) {
-  const newCard = new Card(card.name, card.link, '#card-template', handleCardClick);
+  const newCard = new Card(card.name, card.link, '#card-template', (name, path) => imagePopup.open(name, path));
   return newCard.getCard();
 }
 
@@ -76,23 +44,18 @@ function submitAddCard(evt, formInputs, form) {
 }
 
 //Функция создания Popup для добавления картинок
-function addNewCardPopup() {
-  const formPopup = new PopupWithForm('.popup_type_card', submitAddCard);
-  formPopup.setEventListeners();
+function addNewCardPopup(cardPopup) {
   //Очистить все поля с ошибками
   formValidators.cardValidator.clearAllErrorMessages();
   //Проверка состояния кнопки активации
   formValidators.cardValidator.toggleButtonState();
-  formPopup.open();
+  cardPopup.open();
 }
 
 const userInfo = new UserInfo('.profile__text-field_type_author', '.profile__text-field_type_description');
 
 //Функция открытия Popup для профиля
-function editProfilePopup(userInfo) {
-  //Создаем Popup с формой для редактирования данных автора
-  const formPopup = new PopupWithForm('.popup_type_profile', submitEditForm);
-  formPopup.setEventListeners();
+function editProfilePopup(userInfo, formPopup) {
   formPopup.setInputsData(userInfo.getUserInfo());
   //Очистить все поля с ошибками
   formValidators.profileValidator.clearAllErrorMessages();
@@ -124,11 +87,19 @@ const settings = {
 //Валидация формы для редактирования профиля
 formValidators.profileValidator = new FormValidator(settings, profileEditForm);
 formValidators.profileValidator.enableValidation();
+
+//Создаем Popup с формой для редактирования данных автора
+const authorPopup = new PopupWithForm('.popup_type_profile', submitEditForm);
+authorPopup.setEventListeners();
 //Обработчик события для кнопки изменения данных автора
-profileEditButton.addEventListener('click', () => editProfilePopup(userInfo));
+profileEditButton.addEventListener('click', () => editProfilePopup(userInfo, authorPopup));
+
+//Создаем Popup для добавления новой картинки
+const newCardPopup = new PopupWithForm('.popup_type_card', submitAddCard);
+newCardPopup.setEventListeners();
 
 //Валидация формы создания новой карточки
 formValidators.cardValidator = new FormValidator(settings, cardAddForm);
 formValidators.cardValidator.enableValidation();
 //Обработчик события для кноки создания новой карточки
-cardAddButton.addEventListener('click', () => addNewCardPopup());
+cardAddButton.addEventListener('click', () => addNewCardPopup(newCardPopup));

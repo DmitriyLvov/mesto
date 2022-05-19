@@ -4,13 +4,13 @@ export default class UserInfo {
     this._description = document.querySelector(descriptionSelector);
   }
 
-  getUserInfo = () => {
+  getUserInfo() {
     return {
       author: this._author.textContent,
       description: this._description.textContent
     }
   }
-  setUserInfo = (author, description) => {
+  setUserInfo(author, description) {
     this._author.textContent = author;
     this._description.textContent = description;
 

@@ -19,10 +19,10 @@ export default class Popup {
     }
   }
   setEventListeners() {
-    this._popup.addEventListener('mousedown', this._closeFunction.bind(this))
+    this._popup.addEventListener('mousedown', this._closeFunction)
   }
 
-  _closeFunction(evt) {
+  _closeFunction = (evt) => {
     //Если нажали ЛКМ
     if (evt.which === 1) {
       if (evt.target.classList.contains('popup_opened')) {

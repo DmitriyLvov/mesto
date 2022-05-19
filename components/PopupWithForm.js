@@ -9,7 +9,7 @@ class PopupWithForm extends Popup {
     //this._getInputValues();
   }
 
-  _getInputValues() {
+  _getInputValues = () => {
     const inputs = {};
     Array.from(this._form).forEach(element => {
       //console.log(element.nodeName);
@@ -35,7 +35,7 @@ class PopupWithForm extends Popup {
     })
   }
 
-  close() {
+  close = () => {
     super.close();
     this._form.reset();
   }

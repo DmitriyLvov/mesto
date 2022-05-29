@@ -11,12 +11,12 @@
 <body>
   <div class="root">
     <header class="header">
-      <img class="header__logo" src="<%=require('./images/logo.svg')%>" alt="Логотип">
+      <img class="header__logo" src="<%=require('./src/images/logo.svg')%>" alt="Логотип">
     </header>
     <main>
       <section>
         <div class="profile">
-          <img class="profile__avatar" src="<%=require('./images/avatar.jpg')%>" alt="Аватар">
+          <img class="profile__avatar" src="<%=require('./src/images/avatar.jpg')%>" alt="Аватар">
           <div class="profile__info">
             <div class="profile__author-panel">
               <h1 class="profile__text-field profile__text-field_type_author">Жак-Ив Кусто</h1>
@@ -63,12 +63,22 @@
       </div>
     </div>
   </div>
+  <div class="popup popup_type_confirm">
+    <form name="confirm-form" class="popup__container popup__container_type_confirm">
+      <button type="button" class="popup__close-button"></button>
+      <h2 class="popup__title">Вы уверены?</h2>
+      <button type="submit" class="popup__submit-button popup__submit-button_type_confirm">Да</button>
+    </form>
+  </div>
   <template id="card-template">
     <li class="elements__item">
       <img class="elements__image" src="/" alt="Картинка карточки">
       <div class="elements__description">
         <p class="elements__title"></p>
-        <button type="button" class="elements__like"></button>
+        <div>
+          <button type="button" class="elements__like"></button>
+          <p class="elements__like-counter">0</p>
+        </div>
       </div>
       <button type="button" class="elements__delete-button"></button>
     </li>

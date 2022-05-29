@@ -14,7 +14,7 @@
 
 **GitHubPages**
 
-* [Ссылка на сайт](https://dmitriylvov.github.io/mesto/index.html)
+* [Ссылка на сайт](https://dmitriylvov.github.io/mesto/)
 
 **Figma**
 

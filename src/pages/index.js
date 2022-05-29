@@ -5,7 +5,12 @@ import { FormValidator } from "../components/FormValidator.js";
 import PopupWithImage from '../components/PopupWithImage.js';
 import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import Popup from '../components/Popup.js'
 import UserInfo from "../components/UserInfo.js";
+
+//Данные для авторизации
+const cohort = "cohort-42";
+const token = 'c56e30dc-2883-4270-a59e-b2f7bae969c6';
 
 const formValidators = {};
 //Все элементы Popup для редактирования профиля
@@ -74,6 +79,11 @@ const submitEditForm = (evt, formInputs, form) => {
   form.close();
 }
 
+//Функция подтверждения удаления
+const submitDeleteCard = () => {
+
+}
+
 //Cоздаем класс для валидации форм
 const settings = {
   formSelector: '.popup__container_type_form',
@@ -103,3 +113,7 @@ formValidators.cardValidator = new FormValidator(settings, cardAddForm);
 formValidators.cardValidator.enableValidation();
 //Обработчик события для кноки создания новой карточки
 cardAddButton.addEventListener('click', () => addNewCardPopup(newCardPopup));
+
+const confirmingPopup = new Popup('.popup_type_confirm');
+//console.log(confirmingPopup);
+//confirmingPopup.open();

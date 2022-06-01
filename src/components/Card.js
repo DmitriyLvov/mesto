@@ -2,17 +2,33 @@ export class Card {
   _cardItem;
   _cardPicture;
 
-  constructor(imageName, imagePath, templateSelector, scalePictureFunction) {
+  constructor(card, removeFunction, likeFunction, userID, templateSelector, scalePictureFunction) {
+    const { name, link, likes, owner, _id } = card;
+    owner._id === userID ? this._canRemove = true : this._canRemove = false;
+    this._id = _id;
     const cardTemplate = document.querySelector(templateSelector).content;
     this._cardItem = cardTemplate.querySelector('.elements__item').cloneNode(true);
     //Передаем имя и путь для экземпляра
-    this._cardItem.querySelector('.elements__title').textContent = imageName;
+    this._cardItem.querySelector('.elements__title').textContent = name;
     this._cardPircture = this._cardItem.querySelector('.elements__image');
-    this._cardPircture.src = imagePath;
-    this._cardPircture.alt = imageName;
-    this._scalePictureFunction = scalePictureFunction;
+    this._cardPircture.src = link;
+    this._cardPircture.alt = name;
+    this._cardLikeCounter = this._cardItem.querySelector('.elements__like-counter');
+    this._cardLikeCounter.textContent = likes.length;
     this._cardLikeButton = this._cardItem.querySelector('.elements__like');
     this._cardDeleteButton = this._cardItem.querySelector('.elements__delete-button');
+    //Удаление картинок доступно только для экземпляров собственного авторства
+    if (this._canRemove) {
+      this._cardDeleteButton.classList.remove('elements__delete-button_hidden')
+    }
+    this._scalePictureFunction = scalePictureFunction;
+    this._removeCard = () => removeFunction(this._cardItem);
+    //Определяем, есть ли лайк на карточке
+    likes.some(like => like._id === userID) ? this._liked = true : this._liked = false;
+    if (this._liked) {
+      this._cardLikeButton.classList.add('elements__like_actived');
+    }
+    this._likeFunction = likeFunction;
     this._setEventListeners();
   }
 
@@ -21,13 +37,13 @@ export class Card {
   }
 
   _likePicture = () => {
+    this._likeFunction(this._liked);
     this._cardLikeButton.classList.toggle('elements__like_actived');
+    this._liked ? this._cardLikeCounter.textContent-- : this._cardLikeCounter.textContent++;
+    this._liked = !this._liked;
   }
   _scalePicture = () => {
     this._scalePictureFunction(this._cardPircture.alt, this._cardPircture.src);
-  }
-  _removeCard = () => {
-    this._cardItem.remove();
   }
 
   _setEventListeners = () => {

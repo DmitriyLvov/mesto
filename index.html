@@ -16,7 +16,10 @@
     <main>
       <section>
         <div class="profile">
-          <img class="profile__avatar" src="<%=require('./src/images/avatar.jpg')%>" alt="Аватар">
+          <div class="avatar">
+            <img class="avatar__image" src="<%=require('./src/images/avatar.jpg')%>" alt="Аватар">
+            <div class="avatar__layout"></div>
+          </div>
           <div class="profile__info">
             <div class="profile__author-panel">
               <h1 class="profile__text-field profile__text-field_type_author">Жак-Ив Кусто</h1>
@@ -64,10 +67,19 @@
     </div>
   </div>
   <div class="popup popup_type_confirm">
-    <form name="confirm-form" class="popup__container popup__container_type_confirm">
+    <form name="confirm-form" class="popup__container popup__container_type_form">
       <button type="button" class="popup__close-button"></button>
       <h2 class="popup__title">Вы уверены?</h2>
       <button type="submit" class="popup__submit-button popup__submit-button_type_confirm">Да</button>
+    </form>
+  </div>
+  <div class="popup popup_type_avatar">
+    <form name="avatar-form" class="popup__container popup__container_type_form" novalidate>
+      <button type="button" class="popup__close-button"></button>
+      <h2 class="popup__title">Обновить аватар</h2>
+      <input id="url" class="popup__text-input popup__text-input_order_first" type="url" placeholder="Ссылка на аватар" required>
+      <span class="popup__error popup__error_type_url popup__error_order_first"></span>
+      <button type="submit" class="popup__submit-button">Сохранить</button>
     </form>
   </div>
   <template id="card-template">
@@ -77,10 +89,10 @@
         <p class="elements__title"></p>
         <div>
           <button type="button" class="elements__like"></button>
-          <p class="elements__like-counter">0</p>
+          <p class="elements__like-counter">7</p>
         </div>
       </div>
-      <button type="button" class="elements__delete-button"></button>
+      <button type="button" class="elements__delete-button elements__delete-button_hidden"></button>
     </li>
   </template>
 </body>

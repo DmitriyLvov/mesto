@@ -5,13 +5,14 @@ export default class Section {
     this._section = document.querySelector(sectionSelector);
   }
 
-  renderItems() {
-    this._items.forEach(item => {
-      const element = this._renderer(item);
+  renderItems(images, userID) {
+    images.forEach(image => {
+      const element = this._renderer(image, userID);
       this._section.prepend(element);
-    });
+    })
   }
-  addItem(element) {
+
+  addItem = (element) => {
     this._section.prepend(element);
   }
 }

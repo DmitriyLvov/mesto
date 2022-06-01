@@ -1,19 +1,20 @@
 import Popup from "./Popup.js";
 
 class PopupWithForm extends Popup {
-  constructor(popupSelector, handleSubmit) {
+  constructor(popupSelector, handleSubmit, formType) {
     super(popupSelector);
-    this._form = this._popup.querySelector('.popup__container_type_form');
+    this._form = this._popup.querySelector('.popup__container');
     this._handleSubmit = (evt) => handleSubmit(evt, this._getInputValues(), this);
-    //console.log(this._form)
-    //this._getInputValues();
+    if (formType === 'avatar') {
+      this._form.style.height = '272px'
+    }
+    this._submitButton = this._form.querySelector('.popup__submit-button');
+    this._originalSubmitText = this._submitButton.textContent;
   }
 
   _getInputValues() {
     const inputs = {};
     Array.from(this._form).forEach(element => {
-      //console.log(element.nodeName);
-      //console.log(element.id);
       if (element.nodeName === 'INPUT') {
         inputs[element.id] = element;
       }
@@ -30,14 +31,21 @@ class PopupWithForm extends Popup {
     Object.entries(data).forEach(inputData => {
       //Выполняем поиск нужного input
       const input = this._form.querySelector(`.popup__text-input_type_${inputData[0]}`);
-      //Передаем значение
-      input.value = inputData[1];
+      //Если инпут существует, то передаем значение
+      if (input) {
+        input.value = inputData[1];
+      }
     })
   }
 
   close() {
     super.close();
     this._form.reset();
+    this.changeSubmitButtonText(this._originalSubmitText);
+  }
+
+  changeSubmitButtonText = (newText) => {
+    this._submitButton.textContent = newText;
   }
 }
 

@@ -17,7 +17,6 @@ let userId;
 const formValidators = {};
 //Редактирование аватара
 const avatar = document.querySelector('.avatar__layout');
-const avatarImage = document.querySelector('.avatar__image');
 const avatarElement = document.querySelector('.popup_type_avatar');
 const avatarEditForm = avatarElement.querySelector('[name = "avatar-form"]');
 
@@ -44,7 +43,7 @@ const api = new Api(cohort, token);
 //Функция удаления карточки
 function handleRemoveCard(cardId, confirmPopup, api, cardElement) {
   confirmPopup.changeSubmitFunction((evt) => {
-    confirmPopup.changeSubmitButtonText('Удаление...');
+    confirmPopup.renderLoading(true, 'Удаление...');
     evt.preventDefault();
     api.removeCard(cardId)
       .then(res => {
@@ -54,7 +53,10 @@ function handleRemoveCard(cardId, confirmPopup, api, cardElement) {
       .catch(err => {
         //Если ошибка
         console.log((`Ошибка удаления карточки: ${err}`)); // выведем ошибку в консоль
-      });
+      })
+      .finally(() => {
+        confirmPopup.renderLoading(false);
+      })
 
   })
   confirmPopup.open();
@@ -98,12 +100,13 @@ function addNewCardPopup(cardPopup) {
 }
 
 //Функция добавления новой картинки на страинце
-function submitAddCard(evt, formInputs, form) {
+function submitAddCard(evt, inputsData, form) {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  form.changeSubmitButtonText('Сохранение...');
+  const { title, link } = inputsData
+  form.renderLoading(true, 'Сохранение...');
   const newCard = {
-    name: formInputs.name.value,
-    link: formInputs.path.value
+    name: title,
+    link
   }
   api.addNewCard(newCard)
     .then(res => {
@@ -112,7 +115,10 @@ function submitAddCard(evt, formInputs, form) {
     })
     .catch(err => {
       console.log(`Ошибка добавления новой карточки: ${err}`);
-    });
+    })
+    .finally(() => {
+      form.renderLoading(false);
+    })
 }
 
 const userInfo = new UserInfo('.profile__text-field_type_author', '.profile__text-field_type_description', '.avatar__image');
@@ -130,16 +136,21 @@ function editProfilePopup(userInfo, formPopup) {
 }
 
 //Функция для сохранения новых данных автора
-const submitEditForm = (evt, formInputs, form) => {
+const submitEditForm = (evt, inputsData, form) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-  form.changeSubmitButtonText('Сохранение...')
-  api.setUserInfo({ name: formInputs.author.value, about: formInputs.description.value })
+  const { name, about } = inputsData;
+  //form.changeSubmitButtonText('Сохранение...');
+  form.renderLoading(true, 'Сохранение...');
+  api.setUserInfo({ name, about })
     .then(res => {
       form.userInfo.setUserInfo(res)
       form.close();
     })
     .catch(err => {
       console.log(`Ошибка сохранения данных пользователя: ${err}`);
+    })
+    .finally(() => {
+      form.renderLoading(false);
     });
 }
 
@@ -153,18 +164,19 @@ const editAvatarPopup = (avatarPopup) => {
 //Функция для сохранения аватара
 const saveAvatar = (evt, formInputs, form) => {
   evt.preventDefault();
-  form.changeSubmitButtonText('Сохранение...');
-  //Если данные валидны, то сохраняем их на странице
-  if (!Object.values(formInputs).some(input => input.validity.valid === false)) {
-    api.setAvatar(formInputs.url.value)
-      .then(res => {
-        avatarImage.src = res.avatar;
-        form.close();
-      })
-      .catch(err => {
-        console.log(`Ошибка сохранения аватара: ${err}`);
-      });
-  }
+  form.renderLoading(true, 'Сохранение...');
+  api.setAvatar(formInputs.url)
+    .then(res => {
+      userInfo.setAvatar(res.avatar)
+      form.close();
+    })
+    .catch(err => {
+      console.log(`Ошибка сохранения аватара: ${err}`);
+    })
+    .finally(() => {
+      form.renderLoading(false);
+    })
+
 }
 
 //Cоздаем класс для валидации форм
@@ -181,8 +193,8 @@ const settings = {
 Promise.all([api.getAuthorInfo(), api.getCards()])
   .then(results => {
     userInfo.setUserInfo(results[0]);
+    userInfo.setAvatar(results[0].avatar);
     userId = results[0]._id;
-    avatarImage.src = results[0].avatar;
     section.renderItems(results[1], userId)
   })
 
@@ -209,6 +221,6 @@ cardAddButton.addEventListener('click', () => addNewCardPopup(newCardPopup));
 
 formValidators.avatarValidator = new FormValidator(settings, avatarEditForm);
 formValidators.avatarValidator.enableValidation();
-const avatarPopup = new PopupWithForm('.popup_type_avatar', saveAvatar, "avatar");
+const avatarPopup = new PopupWithForm('.popup_type_avatar', saveAvatar);
 avatarPopup.setEventListeners();
 avatar.addEventListener('click', () => editAvatarPopup(avatarPopup));

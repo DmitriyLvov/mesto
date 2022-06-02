@@ -1,4 +1,5 @@
 import Popup from "./Popup.js";
+import { renderLoading } from "../utils/utils.js";
 
 export default class PopupWithConfirm extends Popup {
   constructor(popupSelector) {
@@ -22,7 +23,8 @@ export default class PopupWithConfirm extends Popup {
     this.changeSubmitButtonText(this._originalSubmitText);
   }
 
-  changeSubmitButtonText = (newText) => {
-    this._submitButton.textContent = newText;
+  renderLoading(isLoading, text) {
+    renderLoading(isLoading, text, this);
   }
+
 }

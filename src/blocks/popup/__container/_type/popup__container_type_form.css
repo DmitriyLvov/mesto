@@ -12,7 +12,6 @@
 @media screen and (max-width:700px) {
   .popup__container_type_form {
     width: 282px;
-    height: 322px;
     top: calc(50% - 322px/2);
     left: calc(50% - 282px/2);
   }

@@ -1,7 +1,8 @@
 import Popup from "./Popup.js";
+import { renderLoading } from "../utils/utils.js";
 
 class PopupWithForm extends Popup {
-  constructor(popupSelector, handleSubmit, formType) {
+  constructor(popupSelector, handleSubmit) {
     super(popupSelector);
     this._form = this._popup.querySelector('.popup__container');
     this._handleSubmit = (evt) => handleSubmit(evt, this._getInputValues(), this);
@@ -38,11 +39,10 @@ class PopupWithForm extends Popup {
   close() {
     super.close();
     this._form.reset();
-    this.changeSubmitButtonText(this._originalSubmitText);
   }
 
-  changeSubmitButtonText = (newText) => {
-    this._submitButton.textContent = newText;
+  renderLoading(isLoading, text) {
+    renderLoading(isLoading, text, this);
   }
 }
 

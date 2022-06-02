@@ -7,6 +7,7 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import { Api } from '../components/Api';
 import PopupWithConfirm from '../components/PopupWithConfirm';
+import { renderLoading } from '../utils/utils';
 
 //Данные для авторизации
 const cohort = "cohort-42";
@@ -43,7 +44,7 @@ const api = new Api(cohort, token);
 //Функция удаления карточки
 function handleRemoveCard(cardId, confirmPopup, api, cardElement) {
   confirmPopup.changeSubmitFunction((evt) => {
-    confirmPopup.renderLoading(true, 'Удаление...');
+    renderLoading(confirmPopup, true, 'Удаление...');
     evt.preventDefault();
     api.removeCard(cardId)
       .then(res => {
@@ -55,7 +56,7 @@ function handleRemoveCard(cardId, confirmPopup, api, cardElement) {
         console.log((`Ошибка удаления карточки: ${err}`)); // выведем ошибку в консоль
       })
       .finally(() => {
-        confirmPopup.renderLoading(false);
+        renderLoading(confirmPopup, false);
       })
 
   })
@@ -102,8 +103,8 @@ function addNewCardPopup(cardPopup) {
 //Функция добавления новой картинки на страинце
 function submitAddCard(evt, inputsData, form) {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  const { title, link } = inputsData
-  form.renderLoading(true, 'Сохранение...');
+  const { title, link } = inputsData;
+  renderLoading(form, true, 'Сохранение...');
   const newCard = {
     name: title,
     link
@@ -117,7 +118,7 @@ function submitAddCard(evt, inputsData, form) {
       console.log(`Ошибка добавления новой карточки: ${err}`);
     })
     .finally(() => {
-      form.renderLoading(false);
+      renderLoading(form, false);
     })
 }
 
@@ -139,8 +140,7 @@ function editProfilePopup(userInfo, formPopup) {
 const submitEditForm = (evt, inputsData, form) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   const { name, about } = inputsData;
-  //form.changeSubmitButtonText('Сохранение...');
-  form.renderLoading(true, 'Сохранение...');
+  renderLoading(form, true, 'Сохранение...');
   api.setUserInfo({ name, about })
     .then(res => {
       form.userInfo.setUserInfo(res)
@@ -150,7 +150,7 @@ const submitEditForm = (evt, inputsData, form) => {
       console.log(`Ошибка сохранения данных пользователя: ${err}`);
     })
     .finally(() => {
-      form.renderLoading(false);
+      renderLoading(form, false, '');
     });
 }
 
@@ -164,7 +164,7 @@ const editAvatarPopup = (avatarPopup) => {
 //Функция для сохранения аватара
 const saveAvatar = (evt, formInputs, form) => {
   evt.preventDefault();
-  form.renderLoading(true, 'Сохранение...');
+  renderLoading(form, true, 'Сохранение...');
   api.setAvatar(formInputs.url)
     .then(res => {
       userInfo.setAvatar(res.avatar)
@@ -174,7 +174,7 @@ const saveAvatar = (evt, formInputs, form) => {
       console.log(`Ошибка сохранения аватара: ${err}`);
     })
     .finally(() => {
-      form.renderLoading(false);
+      renderLoading(form, false);
     })
 
 }

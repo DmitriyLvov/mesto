@@ -1,5 +1,4 @@
 import Popup from "./Popup.js";
-import { renderLoading } from "../utils/utils.js";
 
 class PopupWithForm extends Popup {
   constructor(popupSelector, handleSubmit) {
@@ -41,9 +40,6 @@ class PopupWithForm extends Popup {
     this._form.reset();
   }
 
-  renderLoading(isLoading, text) {
-    renderLoading(isLoading, text, this);
-  }
 }
 
 export default PopupWithForm;

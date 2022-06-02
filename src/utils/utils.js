@@ -1,4 +1,4 @@
-export const renderLoading = (isLoading, text, popup) => {
+export const renderLoading = (popup, isLoading, text) => {
   if (isLoading) {
     popup._submitButton.textContent = text;
   } else {

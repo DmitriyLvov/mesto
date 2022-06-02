@@ -5,6 +5,13 @@ export class Api {
     this._token = token;
   }
 
+  _getResponseData(res) {
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+  }
+
   getAuthorInfo = () => {
     //Запрос данных с сервера
     return fetch(`https://nomoreparties.co/v1/${this._cohortId}/users/me`, {
@@ -12,13 +19,8 @@ export class Api {
           authorization: this._token
         }
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        }
-        //Если ошибка
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
+      .then(res => this._getResponseData(res));
+
   }
 
   getCards = () => {
@@ -28,13 +30,7 @@ export class Api {
           authorization: this._token
         }
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        //Если ошибка
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
+      .then(res => this._getResponseData(res));
   }
 
   setUserInfo = (data) => {
@@ -50,34 +46,23 @@ export class Api {
           about
         })
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        }
-        //Если ошибка
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
+      .then(res => this._getResponseData(res));
   }
 
   addNewCard = (data) => {
     const { name, link } = data;
     return fetch(`https://nomoreparties.co/v1/${this._cohortId}/cards`, {
-      method: "POST",
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        link
+        method: "POST",
+        headers: {
+          authorization: this._token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          link
+        })
       })
-    }).then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      //Если ошибка
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+      .then(res => this._getResponseData(res));
   }
 
   removeCard = (cardId) => {
@@ -87,13 +72,7 @@ export class Api {
           authorization: this._token
         }
       })
-      .then(res => {
-        if (res.ok) {
-          return res;
-        }
-        //Если ошибка
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
+      .then(res => this._getResponseData(res));
   }
 
   addLike = (cardId) => {
@@ -103,13 +82,7 @@ export class Api {
           authorization: this._token
         }
       })
-      .then(res => {
-        if (res.ok) {
-          return res;
-        }
-        //Если ошибка
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
+      .then(res => this._getResponseData(res));
   }
 
   removeLike = (cardId) => {
@@ -119,31 +92,20 @@ export class Api {
           authorization: this._token
         }
       })
-      .then(res => {
-        if (res.ok) {
-          return res;
-        }
-        //Если ошибка
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
+      .then(res => this._getResponseData(res));
   }
 
   setAvatar = (avatar) => {
     return fetch(`https://mesto.nomoreparties.co/v1/${this._cohortId}/users/me/avatar`, {
-      method: "PATCH",
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        avatar
+        method: "PATCH",
+        headers: {
+          authorization: this._token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          avatar
+        })
       })
-    }).then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      //Если ошибка
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+      .then(res => this._getResponseData(res));
   }
 }

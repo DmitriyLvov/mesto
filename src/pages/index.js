@@ -133,17 +133,14 @@ function editProfilePopup(userInfo, formPopup) {
 const submitEditForm = (evt, formInputs, form) => {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   form.changeSubmitButtonText('Сохранение...')
-    //Если данные валидны, то сохраняем их на странице
-  if (!Object.values(formInputs).some(input => input.validity.valid === false)) {
-    api.setUserInfo({ name: formInputs.author.value, about: formInputs.description.value })
-      .then(res => {
-        form.userInfo.setUserInfo(res)
-        form.close();
-      })
-      .catch(err => {
-        console.log(`Ошибка сохранения данных пользователя: ${err}`);
-      });
-  }
+  api.setUserInfo({ name: formInputs.author.value, about: formInputs.description.value })
+    .then(res => {
+      form.userInfo.setUserInfo(res)
+      form.close();
+    })
+    .catch(err => {
+      console.log(`Ошибка сохранения данных пользователя: ${err}`);
+    });
 }
 
 //Функция открытия попап для изменения аватара

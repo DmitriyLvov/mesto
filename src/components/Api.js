@@ -80,8 +80,8 @@ export class Api {
     })
   }
 
-  removeCard = (card_id) => {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._cohortId}/cards/${card_id}`, {
+  removeCard = (cardId) => {
+    return fetch(`https://mesto.nomoreparties.co/v1/${this._cohortId}/cards/${cardId}`, {
         method: "DELETE",
         headers: {
           authorization: this._token
@@ -96,8 +96,8 @@ export class Api {
       })
   }
 
-  addLike = (card_id) => {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._cohortId}/cards/${card_id}/likes`, {
+  addLike = (cardId) => {
+    return fetch(`https://mesto.nomoreparties.co/v1/${this._cohortId}/cards/${cardId}/likes`, {
         method: "PUT",
         headers: {
           authorization: this._token
@@ -112,8 +112,8 @@ export class Api {
       })
   }
 
-  removeLike = (card_id) => {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._cohortId}/cards/${card_id}/likes`, {
+  removeLike = (cardId) => {
+    return fetch(`https://mesto.nomoreparties.co/v1/${this._cohortId}/cards/${cardId}/likes`, {
         method: "DELETE",
         headers: {
           authorization: this._token

@@ -28,6 +28,7 @@ export class Card {
     if (this._liked) {
       this._cardLikeButton.classList.add('elements__like_actived');
     }
+    this._likePicture = () => this._likeFunction(this._liked, this.likePictureRendering);
     this._likeFunction = likeFunction;
     this._setEventListeners();
   }
@@ -36,8 +37,7 @@ export class Card {
     return this._cardItem;
   }
 
-  _likePicture = () => {
-    this._likeFunction(this._liked);
+  likePictureRendering = () => {
     this._cardLikeButton.classList.toggle('elements__like_actived');
     this._liked ? this._cardLikeCounter.textContent-- : this._cardLikeCounter.textContent++;
     this._liked = !this._liked;

@@ -5,9 +5,6 @@ class PopupWithForm extends Popup {
     super(popupSelector);
     this._form = this._popup.querySelector('.popup__container');
     this._handleSubmit = (evt) => handleSubmit(evt, this._getInputValues(), this);
-    if (formType === 'avatar') {
-      this._form.style.height = '272px'
-    }
     this._submitButton = this._form.querySelector('.popup__submit-button');
     this._originalSubmitText = this._submitButton.textContent;
   }

@@ -1,11 +1,9 @@
 import './index.css';
-import { initialCards } from '../utils/constants/InitialCards';
 import { Card } from "../components/Card.js";
 import { FormValidator } from "../components/FormValidator.js";
 import PopupWithImage from '../components/PopupWithImage.js';
 import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
-import Popup from '../components/Popup.js'
 import UserInfo from "../components/UserInfo.js";
 import { Api } from '../components/Api';
 import PopupWithConfirm from '../components/PopupWithConfirm';
@@ -14,7 +12,7 @@ import PopupWithConfirm from '../components/PopupWithConfirm';
 const cohort = "cohort-42";
 const token = 'd74ffdad-4b6e-4d97-9e8c-b8d87caa6667';
 //Переменная для ID пользователя
-let user_id;
+let userId;
 //Сохранение всех валидаторов в одном объекте
 const formValidators = {};
 //Редактирование аватара
@@ -44,11 +42,11 @@ confirmPopup.setEventListeners();
 const api = new Api(cohort, token);
 
 //Функция удаления карточки
-function handleRemoveCard(card_id, confirmPopup, api, cardElement) {
+function handleRemoveCard(cardId, confirmPopup, api, cardElement) {
   confirmPopup.changeSubmitFunction((evt) => {
     confirmPopup.changeSubmitButtonText('Удаление...');
     evt.preventDefault();
-    api.removeCard(card_id)
+    api.removeCard(cardId)
       .then(res => {
         cardElement.remove();
         confirmPopup.close();
@@ -56,7 +54,6 @@ function handleRemoveCard(card_id, confirmPopup, api, cardElement) {
       .catch(err => {
         //Если ошибка
         console.log((`Ошибка удаления карточки: ${err}`)); // выведем ошибку в консоль
-        confirmPopup.close();
       });
 
   })
@@ -64,16 +61,16 @@ function handleRemoveCard(card_id, confirmPopup, api, cardElement) {
 }
 
 //Функция like для карточки
-function handleLikeCard(card_id, api, isLiked) {
+function handleLikeCard(cardId, api, isLiked, likePictureRendering) {
   if (!isLiked) {
-    api.addLike(card_id)
-      .then()
+    api.addLike(cardId)
+      .then(res => likePictureRendering())
       .catch(err => {
         console.log(`Ошибка создания лайка: ${err}`)
       })
   } else {
-    api.removeLike(card_id)
-      .then()
+    api.removeLike(cardId)
+      .then(res => likePictureRendering())
       .catch(err => {
         console.log(`Ошибка удаления лайка: ${err}`)
       })
@@ -81,11 +78,11 @@ function handleLikeCard(card_id, api, isLiked) {
 }
 
 //Функция создания карточки по шаблону
-function createCard(card, user_id) {
+function createCard(card, userId) {
   const newCard = new Card(card,
     (cardElement) => handleRemoveCard(card._id, confirmPopup, api, cardElement),
-    (isLiked) => handleLikeCard(card._id, api, isLiked),
-    user_id,
+    (isLiked, likePictureRendering) => handleLikeCard(card._id, api, isLiked, likePictureRendering),
+    userId,
     '#card-template',
     (name, path) => imagePopup.open(name, path));
   return newCard.getCard();
@@ -110,17 +107,16 @@ function submitAddCard(evt, formInputs, form) {
   }
   api.addNewCard(newCard)
     .then(res => {
-      section.addItem(createCard(res, user_id));
+      section.addItem(createCard(res, userId));
       form.close();
     })
     .catch(err => {
       console.log(`Ошибка добавления новой карточки: ${err}`);
-      form.close();
     });
 }
 
 const userInfo = new UserInfo('.profile__text-field_type_author', '.profile__text-field_type_description', '.avatar__image');
-const section = new Section({ renderer: createCard }, '.elements');
+const section = new Section(createCard, '.elements');
 
 //Функция открытия Popup для профиля
 function editProfilePopup(userInfo, formPopup) {
@@ -146,7 +142,6 @@ const submitEditForm = (evt, formInputs, form) => {
       })
       .catch(err => {
         console.log(`Ошибка сохранения данных пользователя: ${err}`);
-        form.close();
       });
   }
 }
@@ -171,7 +166,6 @@ const saveAvatar = (evt, formInputs, form) => {
       })
       .catch(err => {
         console.log(`Ошибка сохранения аватара: ${err}`);
-        form.close();
       });
   }
 }
@@ -190,9 +184,9 @@ const settings = {
 Promise.all([api.getAuthorInfo(), api.getCards()])
   .then(results => {
     userInfo.setUserInfo(results[0]);
-    user_id = results[0]._id;
+    userId = results[0]._id;
     avatarImage.src = results[0].avatar;
-    section.renderItems(results[1], user_id)
+    section.renderItems(results[1], userId)
   })
 
 //Валидация формы для редактирования профиля
